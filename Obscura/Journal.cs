@@ -4,9 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Obscura
-{
-    public class Class1
-    {
+namespace Obscura {
+    public class Journal {
     }
 }
