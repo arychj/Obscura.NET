@@ -5,7 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Obscura {
-    public class Entity {
+    internal class Settings {
 
+        internal string GetSetting(string key) {
+            return null;
+        }
     }
 }

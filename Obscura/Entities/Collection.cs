@@ -4,7 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Obscura {
+namespace Obscura.Entities {
     public class Collection : Entity {
+        private EntityCollection<Entity> _entities;
+
+        public Collection(string key) : base(key) {
+
+        }
     }
 }
