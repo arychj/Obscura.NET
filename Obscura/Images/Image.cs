@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Obscura.Images {
     public class Image {
-        private string _thumbnail, _image;
+        private string _thumbnail, _display;
         private Resolution _resolution;
 
         #region accessors
@@ -22,7 +22,7 @@ namespace Obscura.Images {
             }
         }
 
-        public byte[] Contents {
+        public byte[] Display {
             get {
                 return new byte[0];
                 //TODO: get image

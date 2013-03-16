@@ -48,11 +48,13 @@
     <Compile Include="Entities\Collection.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityCollection.cs" />
+    <Compile Include="Entities\Key.cs" />
+    <Compile Include="Images\Exif.cs" />
     <Compile Include="Shared\DateTimeSet.cs" />
     <Compile Include="Gallery.cs" />
     <Compile Include="Images\Image.cs" />
     <Compile Include="Images\Resolution.cs" />
-    <Compile Include="Journal.cs" />
+    <Compile Include="Entities\Journal.cs" />
     <Compile Include="Entities\Photo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />

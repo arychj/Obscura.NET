@@ -13,6 +13,7 @@ namespace Obscura {
 
         public Gallery() {
             string connectionstring = ConfigurationManager.AppSettings["ObscuraConnectionString"];
+
         }
 
         public Gallery(string connectionString) {
