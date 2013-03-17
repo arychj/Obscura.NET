@@ -19,10 +19,18 @@ namespace Obscura.Entities {
 
         public VideoSource Type {
             get { return _type; }
+            set {
+                Update(null, value);
+                _type = value;
+            }
         }
 
         public string Url {
             get { return _url; }
+            set {
+                Update(value, null);
+                _url = value;
+            }
         }
 
         #endregion
@@ -35,6 +43,10 @@ namespace Obscura.Entities {
         public string GetHtml() {
             //TODO: GetHtml()
             return null;
+        }
+
+        public void Update(string url, VideoSource? type) {
+            //TODO: update
         }
 
         public static Video Create() {

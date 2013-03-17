@@ -19,7 +19,7 @@ namespace Obscura.Entities {
         public bool Active {
             get { return _active; }
             set {
-                //TODO: set active
+                Update(value, null, null);
                 _active = value;
             }
         }
@@ -31,7 +31,7 @@ namespace Obscura.Entities {
         public string Title {
             get { return _title; }
             set {
-                //TODO: set
+                Update(null, value, null);
                 _title = value;
             }
         }
@@ -39,7 +39,7 @@ namespace Obscura.Entities {
         public string Description {
             get { return _description; }
             set {
-                //TODO: set
+                Update(null, null, value);
                 _description = value;
             }
         }
@@ -57,6 +57,10 @@ namespace Obscura.Entities {
 
         public void Hit() {
             //TODO: update hit count
+        }
+
+        public void Update(bool? active, string title, string description) {
+
         }
 
         internal Entity Create() {
