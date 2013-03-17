@@ -10,14 +10,16 @@ using System.Threading.Tasks;
 
 namespace Obscura.Images {
     public class Image {
-        private string _thumbnail, _display;
+        private Image _thumbnail;
         private Resolution _resolution;
+        private Exif _exif;
+        private string _path;
 
         #region accessors
 
-        public byte[] Thumbnail {
+        public Image Thumbnail {
             get {
-                return new byte[0];
+                return new Image(string.Empty);
                 //TODO: get thumbnail
             }
         }
@@ -26,6 +28,13 @@ namespace Obscura.Images {
             get {
                 return new byte[0];
                 //TODO: get image
+            }
+        }
+
+        public Exif Exif {
+            get {
+                return null;
+                //TODO: get exif
             }
         }
 
@@ -39,7 +48,17 @@ namespace Obscura.Images {
             //TODO: constructor
         }
 
-        private byte[] GetImageContents(string path) {
+        public byte[] GetBytes() {
+            //TODO: GetBytes()
+            return new byte[0];
+        }
+
+        public string GetHtml() {
+            //TODO: GetHtml()
+            return null;
+        }
+
+        private static byte[] GetImageContents(string path) {
             //TODO: get image contents
             return new byte[0];
         }

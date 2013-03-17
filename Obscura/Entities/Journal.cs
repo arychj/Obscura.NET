@@ -12,10 +12,6 @@ namespace Obscura.Entities {
 
         #region accessors
 
-        public Entity Entity {
-            get { return _entity; }
-        }
-
         public string Body {
             get { return _body; }
             set {
@@ -24,13 +20,10 @@ namespace Obscura.Entities {
             }
         }
 
-        public DateTimeSet Dates {
-            get { return _dates; }
-        }
-
         #endregion
 
-        public Journal(string key) : base(key) {
+        public Journal(EntityKey key)
+            : base(key) {
             
         }
 

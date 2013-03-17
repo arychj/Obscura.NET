@@ -4,11 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Obscura.Images;
+
 namespace Obscura.Entities {
     public class Album : Entity {
         private List<Photo> _photos;
+        private Image _thumbnail;
 
         #region accessors
+
+        public Image Thumbnail {
+            get { return _thumbnail; }
+        }
 
         public List<Photo> Photos {
             get { return _photos; }
@@ -16,7 +23,7 @@ namespace Obscura.Entities {
 
         #endregion
 
-        public Album(string id)
+        public Album(EntityKey id)
             : base(id) {
 
         }
