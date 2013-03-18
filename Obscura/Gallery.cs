@@ -12,9 +12,5 @@ namespace Obscura {
         public Gallery() {
 
         }
-
-        public Gallery() {
-
-        }
     }
 }

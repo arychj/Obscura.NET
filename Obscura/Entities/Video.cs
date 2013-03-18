@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Obscura.Entities {
     public class Video : Entity {
-        private EntityKey _key;
+        private int _key;
         private string _url;
         private VideoSource _type;
 
@@ -35,7 +35,7 @@ namespace Obscura.Entities {
 
         #endregion
 
-        public Video(EntityKey key)
+        public Video(int key)
             : base(key) {
 
         }

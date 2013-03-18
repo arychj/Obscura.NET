@@ -22,7 +22,7 @@ namespace Obscura.Entities {
 
         #endregion
 
-        public Journal(EntityKey key)
+        public Journal(int key)
             : base(key) {
             
         }

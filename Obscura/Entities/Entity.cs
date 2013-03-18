@@ -8,7 +8,7 @@ using Obscura.Shared;
 
 namespace Obscura.Entities {
     public class Entity {
-        private EntityKey _key;
+        private int _key;
         private DateTimeSet _dates;
         private bool _active;
         private string _title, _description;
@@ -50,7 +50,7 @@ namespace Obscura.Entities {
 
         #endregion
 
-        internal Entity(EntityKey key) {
+        internal Entity(int key) {
             _key = key;
             //TODO: create dates object
         }
@@ -60,7 +60,7 @@ namespace Obscura.Entities {
         }
 
         public void Update(bool? active, string title, string description) {
-
+            //TODO: update
         }
 
         internal Entity Create() {

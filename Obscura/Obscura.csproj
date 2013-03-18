@@ -48,7 +48,6 @@
     <Compile Include="Entities\Collection.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityCollection.cs" />
-    <Compile Include="Entities\EntityKey.cs" />
     <Compile Include="Entities\Video.cs" />
     <Compile Include="Images\Exif.cs" />
     <Compile Include="Shared\DateTimeSet.cs" />

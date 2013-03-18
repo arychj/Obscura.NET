@@ -23,7 +23,7 @@ namespace Obscura.Entities {
 
         #endregion
 
-        public Album(EntityKey id)
+        public Album(int id)
             : base(id) {
 
         }

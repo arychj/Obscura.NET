@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Obscura.Entities {
     public class EntityCollection<ET> where ET: Entity {
-        private Dictionary<EntityKey, ET> _entities;
+        private Dictionary<int, ET> _entities;
 
         #region operator overloads
 
-        public ET this[EntityKey key] {
+        public ET this[int key] {
             get { return _entities[key]; }
             set {
                 if (_entities.ContainsKey(key))
@@ -23,18 +23,18 @@ namespace Obscura.Entities {
         #endregion
 
         public EntityCollection(){
-            _entities = new Dictionary<EntityKey, ET>();
+            _entities = new Dictionary<int, ET>();
         }
 
         public EntityCollection(string key) {
 
         }
 
-        public bool ContainsKey(EntityKey key) {
+        public bool ContainsKey(int key) {
             return _entities.ContainsKey(key);
         }
 
-        public void Add(EntityKey key, ET entity) {
+        public void Add(int key, ET entity) {
             _entities.Add(key, entity);
             //TODO: save relation to database
         }
