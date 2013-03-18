@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Obscura.Shared
+namespace Obscura.Common
 {
 	using System.Data.Linq;
 	using System.Data.Linq.Mapping;

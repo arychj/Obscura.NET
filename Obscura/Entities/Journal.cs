@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Obscura.Shared;
+using Obscura.Common;
 
 namespace Obscura.Entities {
     public class Journal : Entity {

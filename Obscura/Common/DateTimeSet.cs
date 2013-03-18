@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Obscura.Shared {
+namespace Obscura.Common {
     public class DateTimeSet {
         private DateTime _created, _modified;
 

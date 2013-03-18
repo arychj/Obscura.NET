@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Obscura.Shared;
+using Obscura.Common;
 
 namespace Obscura.Entities {
     public class Entity {
@@ -61,6 +61,7 @@ namespace Obscura.Entities {
 
         public void Update(bool? active, string title, string description) {
             //TODO: update
+            //TODO: update modified time
         }
 
         internal Entity Create() {
