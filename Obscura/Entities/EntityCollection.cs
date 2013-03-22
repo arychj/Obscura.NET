@@ -26,20 +26,20 @@ namespace Obscura.Entities {
             _entities = new Dictionary<int, ET>();
         }
 
-        public EntityCollection(string key) {
+        public EntityCollection(string id) {
 
         }
 
-        public bool ContainsKey(int key) {
-            return _entities.ContainsKey(key);
+        public bool ContainsId(int id) {
+            return _entities.ContainsKey(id);
         }
 
-        public void Add(int key, ET entity) {
-            _entities.Add(key, entity);
+        public void Add(int id, ET entity) {
+            _entities.Add(id, entity);
             //TODO: save relation to database
         }
 
-        public static EntityCollection<ET> GetEntityCollection(string key) {
+        public static EntityCollection<ET> GetEntityCollection(string id) {
             //TODO: GetEnityCollection()
             return null;
         }

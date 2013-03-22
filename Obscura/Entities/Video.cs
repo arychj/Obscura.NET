@@ -35,8 +35,8 @@ namespace Obscura.Entities {
 
         #endregion
 
-        public Video(int key)
-            : base(key) {
+        public Video(int id)
+            : base(id) {
 
         }
 

@@ -23,8 +23,8 @@ namespace Obscura.Entities {
 
         #endregion
 
-        public Collection(int key)
-            : base(key) {
+        public Collection(int id)
+            : base(id) {
 
         }
 

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Obscura.Images {
     public class Image {
+        private int _id;
         private Image _thumbnail;
         private Resolution _resolution;
         private Exif _exif;
@@ -44,7 +45,8 @@ namespace Obscura.Images {
 
         #endregion
 
-        public Image(string key) {
+        public Image(int id) {
+            _id = id;
             //TODO: constructor
         }
 

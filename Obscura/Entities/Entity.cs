@@ -8,7 +8,7 @@ using Obscura.Common;
 
 namespace Obscura.Entities {
     public class Entity {
-        private int _key;
+        private int _id;
         private DateTimeSet _dates;
         private bool _active;
         private string _title, _description;
@@ -50,8 +50,8 @@ namespace Obscura.Entities {
 
         #endregion
 
-        internal Entity(int key) {
-            _key = key;
+        internal Entity(int id) {
+            _id = id;
             //TODO: create dates object
         }
 

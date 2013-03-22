@@ -18,8 +18,8 @@ namespace Obscura.Entities {
 
         #endregion
 
-        public Photo(int key)
-            : base(key) {
+        public Photo(int id)
+            : base(id) {
             
         }
     }

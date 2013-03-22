@@ -22,8 +22,8 @@ namespace Obscura.Entities {
 
         #endregion
 
-        public Journal(int key)
-            : base(key) {
+        public Journal(int id)
+            : base(id) {
             
         }
 
