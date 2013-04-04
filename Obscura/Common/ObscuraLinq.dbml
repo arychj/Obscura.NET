@@ -1,1 +1,30 @@
-﻿
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Obscura" Class="ObscuraLinqDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=mathis;Initial Catalog=Obscura;Integrated Security=True" SettingsObjectName="Obscura.Properties.Settings" SettingsPropertyName="ObscuraConnectionString" Provider="System.Data.SqlClient" />
+  <Function Name="dbo.xspLogHit" Method="xspLogHit">
+    <Parameter Name="entityid" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.xspGetEntity" Method="xspGetEntity">
+    <Parameter Name="entityid" Type="System.Int32" DbType="Int" />
+    <Parameter Name="TypeId" Parameter="typeId" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="Type" Parameter="type" Type="System.String" DbType="VarChar(50)" Direction="InOut" />
+    <Parameter Name="Title" Parameter="title" Type="System.String" DbType="VarChar(50)" Direction="InOut" />
+    <Parameter Name="Description" Parameter="description" Type="System.String" DbType="VarChar(1000)" Direction="InOut" />
+    <Parameter Name="Hits" Parameter="hits" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="CreatedOn" Parameter="createdOn" Type="System.DateTime" DbType="DateTime" Direction="InOut" />
+    <Parameter Name="ModifiedOn" Parameter="modifiedOn" Type="System.DateTime" DbType="DateTime" Direction="InOut" />
+    <Parameter Name="IsActive" Parameter="isActive" Type="System.Boolean" DbType="Bit" Direction="InOut" />
+    <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.xspUpdateEntity" Method="xspUpdateEntity">
+    <Parameter Name="entityid" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="typeid" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="type" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="title" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="description" Type="System.String" DbType="VarChar(1000)" />
+    <Parameter Name="active" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>

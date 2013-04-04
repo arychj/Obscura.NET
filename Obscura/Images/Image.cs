@@ -20,7 +20,7 @@ namespace Obscura.Images {
 
         public Image Thumbnail {
             get {
-                return new Image(string.Empty);
+                return new Image(0);
                 //TODO: get thumbnail
             }
         }

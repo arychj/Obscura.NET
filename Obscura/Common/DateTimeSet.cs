@@ -16,6 +16,7 @@ namespace Obscura.Common {
 
         public DateTime Modified {
             get { return _modified; }
+            internal set { _modified = value; }
         }
 
         #endregion

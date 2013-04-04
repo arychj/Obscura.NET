@@ -7,8 +7,13 @@ using System.Threading.Tasks;
 using Obscura.Common;
 
 namespace Obscura.Entities {
+
+    /// <summary>
+    /// The base class for all Entities
+    /// </summary>
     public class Entity {
-        private int _id;
+        private int _id, _typeid;
+        private EntityType _type;
         private DateTimeSet _dates;
         private bool _active;
         private string _title, _description;
@@ -16,12 +21,24 @@ namespace Obscura.Entities {
 
         #region accessors
 
-        public bool Active {
+        public int Id {
+            get { return _id; }
+        }
+
+        public bool IsActive {
             get { return _active; }
             set {
                 Update(value, null, null);
                 _active = value;
             }
+        }
+
+        public EntityType Type {
+            get { return _type; }
+        }
+
+        internal int TypeId {
+            get { return _typeid; }
         }
 
         public int HitCount {
@@ -50,23 +67,128 @@ namespace Obscura.Entities {
 
         #endregion
 
+        /// <summary>
+        /// Constructor
+        /// Retrieves an Entity from the database
+        /// </summary>
+        /// <param name="id">the id of the Sntity</param>
         internal Entity(int id) {
             _id = id;
-            //TODO: create dates object
+
+            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext("")) {
+                int? typeid = null, hitcount = null;
+                string type = null, title = null, description = null, resultcode = null;
+                DateTime? dtCreated = null, dtModified = null;
+                bool? tfActive = null;
+
+                db.xspGetEntity(id, ref typeid, ref type, ref title, ref description, ref hitcount, ref dtCreated, ref dtModified, ref tfActive, ref resultcode);
+
+                if (resultcode != "SUCCESS") {
+                    throw new Exception(string.Format("Entity ID {0} does not exist. ({1})", id, resultcode));
+                }
+                else {
+                    _id = id;
+                    _typeid = (typeid == null ? 0 : (int)typeid);
+                    _type = (EntityType)Enum.Parse(typeof(EntityType), type);
+                    _title = Title;
+                    _description = description;
+                    _hitcount = (hitcount == null ? 0 : (int)hitcount);
+                    _dates = new DateTimeSet((DateTime)dtCreated, (DateTime)dtModified);
+                    _active = (tfActive == null ? false : (bool)tfActive);
+                }
+            }
         }
 
+        /// <summary>
+        /// Constructor
+        /// Builds an Entity using the specified parameters
+        /// </summary>
+        /// <param name="id">the ID of the Entity</param>
+        /// <param name="typeid">the ID of the Entity's type</param>
+        /// <param name="type">the type of the Entity</param>
+        /// <param name="title">the title of the Entity</param>
+        /// <param name="description">the description of the Entity</param>
+        /// <param name="hitcount">the number of hits on this Entity</param>
+        /// <param name="dates">the important dates associated with this Entity</param>
+        /// <param name="active">the Entity's status</param>
+        internal Entity(int id, int typeid, EntityType type, string title, string description, int hitcount, DateTimeSet dates, bool active) {
+            _id = id;
+            _typeid = typeid;
+            _type = type;
+            _title = title;
+            _description = description;
+            _hitcount = hitcount;
+            _dates = dates;
+            _active = active;
+        }
+
+        /// <summary>
+        /// Increment this Entity's hit counter
+        /// </summary>
         public void Hit() {
-            //TODO: update hit count
+            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext("")) {
+                db.xspLogHit(_id);
+            }
+
+            _hitcount++;
         }
 
+        /// <summary>
+        /// Update this Entity
+        /// Specify null for any parameter to not update
+        /// </summary>
+        /// <param name="active">the new active status</param>
+        /// <param name="title">the new title</param>
+        /// <param name="description">the new description</param>
         public void Update(bool? active, string title, string description) {
-            //TODO: update
-            //TODO: update modified time
+            int? id = _id, typeid = null;
+            string resultcode = null;
+
+            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext("")) {
+                db.xspUpdateEntity(ref id, ref typeid, null, title, description, active, ref resultcode);
+            }
+
+            if (resultcode != "SUCCESS") {
+                throw new Exception(string.Format("Unable to update Entity ID {0}. ({1})", _id, resultcode));
+            }
+            else {
+                _dates.Modified = DateTime.Now;
+            }
         }
 
-        internal Entity Create() {
-            //TODO: create
-            return null;
+        /// <summary>
+        /// Creates a new Entity
+        /// </summary>
+        /// <param name="type">the type of Entity</param>
+        /// <param name="title">the title of the Entity</param>
+        /// <param name="description">the description of the entity</param>
+        /// <returns>the new Entity object</returns>
+        internal static Entity Create(EntityType type, string title, string description) {
+            Entity entity = null;
+            int? id = -1, typeid = null;
+            string resultcode = null;
+
+            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext("")) {
+                db.xspUpdateEntity(ref id, ref typeid, type.ToString(), title, description, true, ref resultcode);
+            }
+
+            if (resultcode != "SUCCESS") {
+                throw new Exception(string.Format("Unable to create Entity. ({0})", resultcode));
+            }
+            else {
+                entity = new Entity(
+                            (int)id, 
+                            (int)typeid, 
+                            type, 
+                            title, 
+                            description, 
+                            0, 
+                            new DateTimeSet(DateTime.Now, DateTime.Now), 
+                            true
+                        );
+            }
+
+            return entity;
         }
     }
 }
