@@ -13,6 +13,10 @@ namespace Obscura.Common {
             get { return ConfigurationManager.ConnectionStrings[CONNECTION_STRING_KEY].ToString(); }
         }
 
+        internal static string ApplicationName {
+            get { return ConfigurationManager.AppSettings["ApplicationName"]; }
+        }
+
         /// <summary>
         /// Gets an setting from the web.config
         /// </summary>

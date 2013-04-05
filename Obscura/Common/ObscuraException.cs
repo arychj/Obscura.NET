@@ -46,26 +46,26 @@ namespace Obscura.Common {
 
         #region constructors
 
-        public ObscuraException(string origin, string message, string type, string stackTrace, string ip, string details)
+        public ObscuraException(string message, string type, string stackTrace, string details)
             : base(message) {
-            _origin = origin;
+            _origin = Config.ApplicationName;
             _type = type;
             _message = message;
             _stackTrace = stackTrace;
             _details = details;
-            _ip = ip;
+            _ip = ClientTools.IPAddress();
 
             LogException();
         }
 
-        public ObscuraException(string origin, string ip, string details)
-            : this(origin, "", "", "", ip, "") { }
+        public ObscuraException(string details)
+            : this("", "", "", "") { }
 
-        public ObscuraException(string origin, Exception e, string ip)
-            : this (origin, e.Message, e.GetType().ToString(), e.StackTrace, ip, "") { }
+        public ObscuraException(Exception e)
+            : this (e.Message, e.GetType().ToString(), e.StackTrace, "") { }
 
-        public ObscuraException(string origin, Exception e, string ip, string details)
-            : this (origin, e.Message, e.GetType().ToString(), e.StackTrace, ip, details) { }
+        public ObscuraException(Exception e, string details)
+            : this (e.Message, e.GetType().ToString(), e.StackTrace, details) { }
 
         /// <summary>
         /// Set the custom properties for the Exception
@@ -112,7 +112,7 @@ namespace Obscura.Common {
                 int? id = null;
                 string resultcode = null;
 
-                db.xspWriteException(ref id, _origin, _type, _message, _details, _stackTrace, ClientTools.IPAddress(), ref resultcode);
+                db.xspWriteException(ref id, _origin, _type, _message, _details, _stackTrace, _ip, ref resultcode);
 
                 _id = (int)id;
             }
