@@ -94,6 +94,142 @@ namespace Obscura.Common
 			resultcode = ((string)(result.GetParameterValue(6)));
 			return ((int)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspGetPhoto")]
+		public ISingleResult<xspGetPhotoResult> xspGetPhoto([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> photoid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> thumbnailid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> imageid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, photoid, thumbnailid, imageid, resultcode);
+			entityid = ((System.Nullable<int>)(result.GetParameterValue(0)));
+			photoid = ((System.Nullable<int>)(result.GetParameterValue(1)));
+			thumbnailid = ((System.Nullable<int>)(result.GetParameterValue(2)));
+			imageid = ((System.Nullable<int>)(result.GetParameterValue(3)));
+			resultcode = ((string)(result.GetParameterValue(4)));
+			return ((ISingleResult<xspGetPhotoResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspUpdatePhoto")]
+		public ISingleResult<xspUpdatePhotoResult> xspUpdatePhoto([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> photoid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> thumbnailid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> imageid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, photoid, thumbnailid, imageid, resultcode);
+			photoid = ((System.Nullable<int>)(result.GetParameterValue(1)));
+			resultcode = ((string)(result.GetParameterValue(4)));
+			return ((ISingleResult<xspUpdatePhotoResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspWriteException")]
+		public int xspWriteException([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> id, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(1000)")] string origin, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(1000)")] string type, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(1000)")] string message, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(MAX)")] string details, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Text")] string stacktrace, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(15)")] string clientip, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), id, origin, type, message, details, stacktrace, clientip, resultcode);
+			id = ((System.Nullable<int>)(result.GetParameterValue(0)));
+			resultcode = ((string)(result.GetParameterValue(7)));
+			return ((int)(result.ReturnValue));
+		}
+	}
+	
+	public partial class xspGetPhotoResult
+	{
+		
+		private System.Nullable<int> _id;
+		
+		private string _path;
+		
+		private System.Nullable<int> _resolutionX;
+		
+		private System.Nullable<int> _resolutionY;
+		
+		public xspGetPhotoResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="Int")]
+		public System.Nullable<int> id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this._id = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_path", DbType="VarChar(1000)")]
+		public string path
+		{
+			get
+			{
+				return this._path;
+			}
+			set
+			{
+				if ((this._path != value))
+				{
+					this._path = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_resolutionX", DbType="Int")]
+		public System.Nullable<int> resolutionX
+		{
+			get
+			{
+				return this._resolutionX;
+			}
+			set
+			{
+				if ((this._resolutionX != value))
+				{
+					this._resolutionX = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_resolutionY", DbType="Int")]
+		public System.Nullable<int> resolutionY
+		{
+			get
+			{
+				return this._resolutionY;
+			}
+			set
+			{
+				if ((this._resolutionY != value))
+				{
+					this._resolutionY = value;
+				}
+			}
+		}
+	}
+	
+	public partial class xspUpdatePhotoResult
+	{
+		
+		private int _id;
+		
+		public xspUpdatePhotoResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="Int NOT NULL")]
+		public int id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this._id = value;
+				}
+			}
+		}
 	}
 }
 #pragma warning restore 1591
