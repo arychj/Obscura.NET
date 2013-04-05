@@ -18,6 +18,10 @@ namespace Obscura.Images {
 
         #region accessors
 
+        public int Id {
+            get { return _id; }
+        }
+
         public Image Thumbnail {
             get {
                 return new Image(0);
