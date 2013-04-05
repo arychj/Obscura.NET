@@ -72,7 +72,7 @@ namespace Obscura.Entities {
         /// Retrieves an Entity from the database
         /// </summary>
         /// <param name="id">the id of the Sntity</param>
-        internal Entity(int id) {
+        public Entity(int id) {
             _id = id;
 
             using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
