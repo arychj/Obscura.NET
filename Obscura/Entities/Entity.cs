@@ -75,7 +75,7 @@ namespace Obscura.Entities {
         internal Entity(int id) {
             _id = id;
 
-            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext("")) {
+            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
                 int? typeid = null, hitcount = null;
                 string type = null, title = null, description = null, resultcode = null;
                 DateTime? dtCreated = null, dtModified = null;
@@ -83,10 +83,7 @@ namespace Obscura.Entities {
 
                 db.xspGetEntity(id, ref typeid, ref type, ref title, ref description, ref hitcount, ref dtCreated, ref dtModified, ref tfActive, ref resultcode);
 
-                if (resultcode != "SUCCESS") {
-                    throw new Exception(string.Format("Entity ID {0} does not exist. ({1})", id, resultcode));
-                }
-                else {
+                if (resultcode == "SUCCESS") {
                     _id = id;
                     _typeid = (typeid == null ? 0 : (int)typeid);
                     _type = (EntityType)Enum.Parse(typeof(EntityType), type);
@@ -96,6 +93,8 @@ namespace Obscura.Entities {
                     _dates = new DateTimeSet((DateTime)dtCreated, (DateTime)dtModified);
                     _active = (tfActive == null ? false : (bool)tfActive);
                 }
+                else
+                    throw new ObscuraException(string.Format("Entity ID {0} does not exist. ({1})", id, resultcode));
             }
         }
 
@@ -126,7 +125,7 @@ namespace Obscura.Entities {
         /// Increment this Entity's hit counter
         /// </summary>
         public void Hit() {
-            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext("")) {
+            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
                 db.xspLogHit(_id);
             }
 
@@ -144,16 +143,15 @@ namespace Obscura.Entities {
             int? id = _id, typeid = null;
             string resultcode = null;
 
-            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext("")) {
+            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
                 db.xspUpdateEntity(ref id, ref typeid, null, title, description, active, ref resultcode);
             }
 
-            if (resultcode != "SUCCESS") {
-                throw new Exception(string.Format("Unable to update Entity ID {0}. ({1})", _id, resultcode));
-            }
-            else {
+            if (resultcode == "SUCCESS") {
                 _dates.Modified = DateTime.Now;
             }
+            else
+                throw new ObscuraException(string.Format("Unable to update Entity ID {0}. ({1})", _id, resultcode));
         }
 
         /// <summary>
@@ -168,14 +166,11 @@ namespace Obscura.Entities {
             int? id = -1, typeid = null;
             string resultcode = null;
 
-            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext("")) {
+            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
                 db.xspUpdateEntity(ref id, ref typeid, type.ToString(), title, description, true, ref resultcode);
             }
 
-            if (resultcode != "SUCCESS") {
-                throw new Exception(string.Format("Unable to create Entity. ({0})", resultcode));
-            }
-            else {
+            if (resultcode == "SUCCESS") {
                 entity = new Entity(
                             (int)id, 
                             (int)typeid, 
@@ -187,6 +182,8 @@ namespace Obscura.Entities {
                             true
                         );
             }
+            else
+                throw new ObscuraException(string.Format("Unable to create Entity. ({0})", resultcode));
 
             return entity;
         }
