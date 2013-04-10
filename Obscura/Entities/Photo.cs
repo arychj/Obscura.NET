@@ -62,7 +62,7 @@ namespace Obscura.Entities {
             string resultcode = null;
 
             using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
-                ISingleResult<xspGetPhotoResult> images = db.xspGetPhoto(ref entityid, ref photoid, ref thumbnailid, ref imageid, ref resultcode);
+                ISingleResult<xspGetPhotoResult> images = db.xspGetPhoto(ref entityid, ref thumbnailid, ref imageid, ref resultcode);
 
                 if (resultcode == "SUCCESS") {
                     _id = (int)photoid;
@@ -100,7 +100,7 @@ namespace Obscura.Entities {
             string resultcode = null;
 
             using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
-                db.xspUpdatePhoto(entityid, ref photoid, thumbnailid, imageid, ref resultcode);
+                db.xspUpdatePhoto(entityid, thumbnailid, imageid, ref resultcode);
 
                 if(resultcode != "SUCCESS")
                     throw new ObscuraException(string.Format("Unable to update Photo Entity ID {0}. ({1})", base.Id, resultcode));
@@ -123,7 +123,7 @@ namespace Obscura.Entities {
 
             using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
                 entity = Entity.Create(EntityType.Photo, title, description);
-                db.xspUpdatePhoto(entity.Id, ref photoid, thumbnailid, imageid, ref resultcode);
+                db.xspUpdatePhoto(entity.Id, thumbnailid, imageid, ref resultcode);
 
                 if (resultcode == "SUCCESS") {
                     photo = new Photo(entity, (int)photoid, thumbnailid, imageid);

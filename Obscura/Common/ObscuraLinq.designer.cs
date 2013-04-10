@@ -95,27 +95,6 @@ namespace Obscura.Common
 			return ((int)(result.ReturnValue));
 		}
 		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspGetPhoto")]
-		public ISingleResult<xspGetPhotoResult> xspGetPhoto([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> photoid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> thumbnailid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> imageid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, photoid, thumbnailid, imageid, resultcode);
-			entityid = ((System.Nullable<int>)(result.GetParameterValue(0)));
-			photoid = ((System.Nullable<int>)(result.GetParameterValue(1)));
-			thumbnailid = ((System.Nullable<int>)(result.GetParameterValue(2)));
-			imageid = ((System.Nullable<int>)(result.GetParameterValue(3)));
-			resultcode = ((string)(result.GetParameterValue(4)));
-			return ((ISingleResult<xspGetPhotoResult>)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspUpdatePhoto")]
-		public ISingleResult<xspUpdatePhotoResult> xspUpdatePhoto([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> photoid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> thumbnailid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> imageid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, photoid, thumbnailid, imageid, resultcode);
-			photoid = ((System.Nullable<int>)(result.GetParameterValue(1)));
-			resultcode = ((string)(result.GetParameterValue(4)));
-			return ((ISingleResult<xspUpdatePhotoResult>)(result.ReturnValue));
-		}
-		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspWriteException")]
 		public int xspWriteException([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> id, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(1000)")] string origin, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(1000)")] string type, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(1000)")] string message, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(MAX)")] string details, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Text")] string stacktrace, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(15)")] string clientip, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
 		{
@@ -124,12 +103,57 @@ namespace Obscura.Common
 			resultcode = ((string)(result.GetParameterValue(7)));
 			return ((int)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspUpdatePhoto")]
+		public ISingleResult<xspUpdatePhotoResult> xspUpdatePhoto([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> thumbnailid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> imageid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, thumbnailid, imageid, resultcode);
+			resultcode = ((string)(result.GetParameterValue(3)));
+			return ((ISingleResult<xspUpdatePhotoResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspGetPhoto")]
+		public ISingleResult<xspGetPhotoResult> xspGetPhoto([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> thumbnailid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> imageid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, thumbnailid, imageid, resultcode);
+			entityid = ((System.Nullable<int>)(result.GetParameterValue(0)));
+			thumbnailid = ((System.Nullable<int>)(result.GetParameterValue(1)));
+			imageid = ((System.Nullable<int>)(result.GetParameterValue(2)));
+			resultcode = ((string)(result.GetParameterValue(3)));
+			return ((ISingleResult<xspGetPhotoResult>)(result.ReturnValue));
+		}
+	}
+	
+	public partial class xspUpdatePhotoResult
+	{
+		
+		private int _id;
+		
+		public xspUpdatePhotoResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="Int NOT NULL")]
+		public int id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this._id = value;
+				}
+			}
+		}
 	}
 	
 	public partial class xspGetPhotoResult
 	{
 		
-		private System.Nullable<int> _id;
+		private System.Nullable<int> _id_entity;
 		
 		private string _path;
 		
@@ -141,18 +165,18 @@ namespace Obscura.Common
 		{
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="Int")]
-		public System.Nullable<int> id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_entity", DbType="Int")]
+		public System.Nullable<int> id_entity
 		{
 			get
 			{
-				return this._id;
+				return this._id_entity;
 			}
 			set
 			{
-				if ((this._id != value))
+				if ((this._id_entity != value))
 				{
-					this._id = value;
+					this._id_entity = value;
 				}
 			}
 		}
@@ -201,32 +225,6 @@ namespace Obscura.Common
 				if ((this._resolutionY != value))
 				{
 					this._resolutionY = value;
-				}
-			}
-		}
-	}
-	
-	public partial class xspUpdatePhotoResult
-	{
-		
-		private int _id;
-		
-		public xspUpdatePhotoResult()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="Int NOT NULL")]
-		public int id
-		{
-			get
-			{
-				return this._id;
-			}
-			set
-			{
-				if ((this._id != value))
-				{
-					this._id = value;
 				}
 			}
 		}

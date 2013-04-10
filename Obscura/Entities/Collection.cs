@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +9,7 @@ using Obscura.Images;
 namespace Obscura.Entities {
     public class Collection : Entity {
         private Image _thumbnail;
-        private EntityCollection<Entity> _entities;
+        private EntityCollection _entities;
 
         #region accessors
 

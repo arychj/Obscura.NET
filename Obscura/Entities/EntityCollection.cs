@@ -5,28 +5,34 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Obscura.Entities {
-    public class EntityCollection<ET> where ET: Entity {
-        private Dictionary<int, ET> _entities;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class EntityCollection {
+        private Entity _parent;
+        private Dictionary<int, Entity> _entities;
 
         #region operator overloads
 
-        public ET this[int key] {
-            get { return _entities[key]; }
+        public Entity this[int id] {
+            get { return _entities[id]; }
             set {
-                if (_entities.ContainsKey(key))
-                    _entities[key] = value;
+                if (_entities.ContainsKey(id))
+                    _entities[id] = value;
                 else
-                    Add(key, value);
+                    Add(id, value);
             }
         }
 
         #endregion
 
-        public EntityCollection(){
-            _entities = new Dictionary<int, ET>();
+        public EntityCollection(Entity parent){
+            _parent = parent;
+            _entities = GetMemberEntities(parent);
         }
 
-        public EntityCollection(string id) {
+        public EntityCollection(int id) {
 
         }
 
@@ -34,12 +40,20 @@ namespace Obscura.Entities {
             return _entities.ContainsKey(id);
         }
 
-        public void Add(int id, ET entity) {
+        public void Add(int id, Entity entity) {
             _entities.Add(id, entity);
             //TODO: save relation to database
         }
 
-        public static EntityCollection<ET> GetEntityCollection(string id) {
+        private Dictionary<int, Entity> GetMemberEntities(Entity parent) {
+            return null;
+        }
+
+        public static EntityCollection GetEntityCollection(Entity entity) {
+            return GetEntityCollection(entity.Id);
+        }
+
+        public static EntityCollection GetEntityCollection(int id) {
             //TODO: GetEnityCollection()
             return null;
         }
