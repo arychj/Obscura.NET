@@ -71,7 +71,7 @@ namespace Obscura.Entities {
         /// Constructor
         /// Retrieves an Entity from the database
         /// </summary>
-        /// <param name="id">the id of the Sntity</param>
+        /// <param name="id">the id of the Entity</param>
         public Entity(int id) {
             _id = id;
 
@@ -96,6 +96,21 @@ namespace Obscura.Entities {
                 else
                     throw new ObscuraException(string.Format("Entity ID {0} does not exist. ({1})", id, resultcode));
             }
+        }
+
+        /// <summary>
+        /// Constructor
+        /// Builds an Entity using the specified entity
+        /// </summary>
+        /// <param name="entity">the entity to use</param>
+        internal Entity(Entity entity) {
+            _id = entity.Id;
+            _type = entity.Type;
+            _title = entity.Title;
+            _description = entity.Description;
+            _hitcount = entity.HitCount;
+            _dates = entity.Dates;
+            _active = entity.IsActive;
         }
 
         /// <summary>
