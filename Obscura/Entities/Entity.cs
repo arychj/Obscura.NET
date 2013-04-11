@@ -21,10 +21,16 @@ namespace Obscura.Entities {
 
         #region accessors
 
+        /// <summary>
+        /// The unique ID associated with this Wntity
+        /// </summary>
         public int Id {
             get { return _id; }
         }
 
+        /// <summary>
+        /// Is this Entity active?
+        /// </summary>
         public bool IsActive {
             get { return _active; }
             set {
@@ -33,18 +39,30 @@ namespace Obscura.Entities {
             }
         }
 
+        /// <summary>
+        /// This Entity's type
+        /// </summary>
         public EntityType Type {
             get { return _type; }
         }
 
+        /// <summary>
+        /// The ID of this Entity's EntityType
+        /// </summary>
         internal int TypeId {
             get { return _typeid; }
         }
 
+        /// <summary>
+        /// The number of times this Entity has been accesses
+        /// </summary>
         public int HitCount {
             get { return _hitcount; }
         }
 
+        /// <summary>
+        /// This Entity's title
+        /// </summary>
         public string Title {
             get { return _title; }
             set {
@@ -53,6 +71,9 @@ namespace Obscura.Entities {
             }
         }
 
+        /// <summary>
+        /// This Entity's description
+        /// </summary>
         public string Description {
             get { return _description; }
             set {
@@ -61,6 +82,9 @@ namespace Obscura.Entities {
             }
         }
 
+        /// <summary>
+        /// Important dates associated with this Entity
+        /// </summary>
         public DateTimeSet Dates {
             get { return _dates; }
         }
