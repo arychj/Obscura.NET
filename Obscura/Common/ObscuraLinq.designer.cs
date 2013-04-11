@@ -122,6 +122,27 @@ namespace Obscura.Common
 			resultcode = ((string)(result.GetParameterValue(3)));
 			return ((ISingleResult<xspGetPhotoResult>)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspGetSetting")]
+		public int xspGetSetting([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> id, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(100)")] ref string name, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(MAX)")] ref string value, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Bit")] ref System.Nullable<bool> tfEncrypted, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), id, name, value, tfEncrypted, resultcode);
+			id = ((System.Nullable<int>)(result.GetParameterValue(0)));
+			name = ((string)(result.GetParameterValue(1)));
+			value = ((string)(result.GetParameterValue(2)));
+			tfEncrypted = ((System.Nullable<bool>)(result.GetParameterValue(3)));
+			resultcode = ((string)(result.GetParameterValue(4)));
+			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspUpdateSetting")]
+		public int xspUpdateSetting([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> id, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(100)")] string name, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(MAX)")] string value, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Bit")] System.Nullable<bool> tfEncrypted, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), id, name, value, tfEncrypted, resultcode);
+			id = ((System.Nullable<int>)(result.GetParameterValue(0)));
+			resultcode = ((string)(result.GetParameterValue(4)));
+			return ((int)(result.ReturnValue));
+		}
 	}
 	
 	public partial class xspUpdatePhotoResult
