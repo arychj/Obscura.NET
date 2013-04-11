@@ -14,7 +14,7 @@ using Obscura.Common;
 namespace Obscura.Entities {
     public class Image : Entity {
         private Resolution _resolution;
-        private Exif _exif;
+        private Exif _exif = null;
         private string _filePath, _mimeType, _url = null, _html = null;
 
         #region accessors
@@ -51,8 +51,11 @@ namespace Obscura.Entities {
 
         public Exif Exif {
             get {
-                //TODO: get exif
-                return new Exif(FilePath);
+                //TODO: exif from db
+                if(_exif == null)
+                    _exif = new Exif(FilePath);
+
+                return _exif;
             }
         }
 
@@ -81,11 +84,12 @@ namespace Obscura.Entities {
                 throw new ObscuraException(string.Format("Unable to load Image ID {0}. ({1})", id, resultcode));
         }
 
-        internal Image(Entity entity, string path, string mimeType, Resolution resolution)
+        internal Image(Entity entity, string path, string mimeType, Exif exif)
             : base(entity) {
                 _filePath = path;
                 _mimeType = mimeType;
-                _resolution = resolution;
+                _exif = exif;
+                _resolution = exif.Resolution;
         }
 
         public void Write(HttpResponse response) {
@@ -125,7 +129,7 @@ namespace Obscura.Entities {
                     db.xspUpdateImage(entity.Id, fileName, mimeType, exif.Resolution.X, exif.Resolution.Y, ref resultcode);
 
                     if (resultcode == "SUCCESS") {
-                        image = new Image(entity, newPath, mimeType, exif.Resolution);
+                        image = new Image(entity, fileName, mimeType, exif);
                     }
                     else
                         throw new ObscuraException(string.Format("Unable to create Image. ({0})", resultcode));
@@ -155,7 +159,7 @@ namespace Obscura.Entities {
                 db.xspUpdateImage(entity.Id, fileName, mimeType, exif.Resolution.X, exif.Resolution.Y, ref resultcode);
 
                 if (resultcode == "SUCCESS") {
-                    image = new Image(entity, newPath, mimeType, exif.Resolution);
+                    image = new Image(entity, newPath, mimeType, exif);
                 }
                 else
                     throw new ObscuraException(string.Format("Unable to create Image. ({0})", resultcode));
