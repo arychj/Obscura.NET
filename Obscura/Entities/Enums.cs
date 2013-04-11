@@ -8,6 +8,7 @@ namespace Obscura.Entities {
     public enum EntityType {
         Album,
         Collection,
+        Image,
         Journal,
         Photo,
         Video
