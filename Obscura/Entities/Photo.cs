@@ -14,17 +14,9 @@ namespace Obscura.Entities {
     /// A Photo object
     /// </summary>
     public class Photo : Entity{
-        private int _id;
         private Image _image, _thumbnail;
 
         #region accessors
-
-        /// <summary>
-        /// The internal photo-id
-        /// </summary>
-        internal int PhotoId {
-            get { return _id; }
-        }
 
         /// <summary>
         /// The main Image associated with the Photo
@@ -57,7 +49,7 @@ namespace Obscura.Entities {
         /// <param name="id">the id of the Photo</param>
         public Photo(int id) 
             : base(id) {
-            int? photoid = null, entityid = id;
+            int? entityid = id;
             int? thumbnailid = null, imageid = null;
             string resultcode = null;
 
@@ -65,7 +57,6 @@ namespace Obscura.Entities {
                 ISingleResult<xspGetPhotoResult> images = db.xspGetPhoto(ref entityid, ref thumbnailid, ref imageid, ref resultcode);
 
                 if (resultcode == "SUCCESS") {
-                    _id = (int)photoid;
                     _thumbnail = new Image((int)thumbnailid);
                     _image = new Image((int)imageid);
                 }
@@ -83,8 +74,7 @@ namespace Obscura.Entities {
         /// <param name="thumbnailid">the id of the thumbnail Image associated with this photo</param>
         /// <param name="imageid">the id of the main Image associated with this photos</param>
         internal Photo(Entity entity, int photoid, int thumbnailid, int imageid)
-            : base(entity.Id, entity.TypeId, entity.Type, entity.Title, entity.Description, entity.HitCount, entity.Dates, entity.IsActive) {
-            _id = photoid;
+            : base(entity) {
             _thumbnail = new Image(thumbnailid);
             _image = new Image(imageid);
         }
@@ -96,11 +86,10 @@ namespace Obscura.Entities {
         /// <param name="thumbnailid">the id of the thumbnail Image associated with this Photo</param>
         /// <param name="imageid">the id of the main Image associated with this Photo</param>
         public void Update(int? thumbnailid, int? imageid) {
-            int? entityid = base.Id, photoid = _id;
             string resultcode = null;
 
             using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
-                db.xspUpdatePhoto(entityid, thumbnailid, imageid, ref resultcode);
+                db.xspUpdatePhoto(base.Id, thumbnailid, imageid, ref resultcode);
 
                 if(resultcode != "SUCCESS")
                     throw new ObscuraException(string.Format("Unable to update Photo Entity ID {0}. ({1})", base.Id, resultcode));
