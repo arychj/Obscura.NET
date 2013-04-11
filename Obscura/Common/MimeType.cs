@@ -18,5 +18,18 @@ namespace Obscura.Common {
                 default: return "text/plain";
             }
         }
+
+        public static string LookupExtension(string mimetype) {
+            switch (mimetype) {
+                case "image/bmp": return "bmp";
+                case "image/x-canon-cr2": return "cr2";
+                case "image/gif": return "gif";
+                case "image/jpeg": return "jpg";
+                case "image/jpg": return "jpg";
+                case "image/png": return "png";
+                case "image/tiff": return "tiff";
+                default: return "txt";
+            }
+        }
     }
 }
