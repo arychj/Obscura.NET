@@ -47,68 +47,67 @@ namespace Obscura.Entities {
         }
 
         /// <summary>
-        /// 
+        /// The time the image was taken
         /// </summary>
         public DateTime TimeTaken {
             get { return _timeTaken; }
         }
 
         /// <summary>
-        /// 
+        /// The make of the camera which captured the image
         /// </summary>
         public string CamerMake {
             get { return _cameraMake; }
         }
 
         /// <summary>
-        /// 
+        /// The model of the camera which captured the image
         /// </summary>
         public string CameraModel {
             get { return _cameraModel; }
         }
 
         /// <summary>
-        /// The lens which was used to capture the image
+        /// The type of lens which was used to capture the image
         /// </summary>
         public string Lens {
             get { return _lens; }
         }
 
         /// <summary>
-        /// 
+        /// The author who captured the image
         /// </summary>
         public string Author {
             get { return _author; }
         }
 
         /// <summary>
-        /// 
+        /// THe copyright info associated with the image
         /// </summary>
         public string Copyright {
             get { return _copyright; }
         }
 
         /// <summary>
-        /// 
+        /// The latitude at which the image was taken
         /// </summary>
         public double Latitude {
             get { return _latitude; }
         }
 
         /// <summary>
-        /// 
+        /// The longitude at which the image was taken
         /// </summary>
         public double Longitude {
             get { return _longitude; }
         }
 
         /// <summary>
-        /// 
+        /// The resolution of the image
         /// </summary>
         public Resolution Resolution {
             get { return _resolution; }
         }
-
 
         #endregion accessors
 
