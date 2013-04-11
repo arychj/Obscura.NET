@@ -170,6 +170,19 @@ namespace Obscura.Entities {
         }
 
         /// <summary>
+        /// Deletes this Entity and removes it from the database
+        /// </summary>
+        public void Delete() {
+            string resultcode = null;
+            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
+                db.xspDeleteEntity(_id, ref resultcode);
+            }
+
+            if (resultcode != "SUCCESS")
+                throw new ObscuraException(string.Format("Unable to delete Entity ID {0}", _id));
+        }
+
+        /// <summary>
         /// Creates a new Entity
         /// </summary>
         /// <param name="type">the type of Entity</param>

@@ -163,6 +163,14 @@ namespace Obscura.Common
 			resultcode = ((string)(result.GetParameterValue(5)));
 			return ((ISingleResult<xspUpdateImageResult>)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspDeleteEntity")]
+		public int xspDeleteEntity([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, resultcode);
+			resultcode = ((string)(result.GetParameterValue(1)));
+			return ((int)(result.ReturnValue));
+		}
 	}
 	
 	public partial class xspUpdatePhotoResult

@@ -95,4 +95,9 @@
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </ElementType>
   </Function>
+  <Function Name="dbo.xspDeleteEntity" Method="xspDeleteEntity">
+    <Parameter Name="entityid" Type="System.Int32" DbType="Int" />
+    <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
 </Database>
