@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -111,52 +112,25 @@ namespace Obscura.Entities {
 
         #endregion accessors
 
+        /// <summary>
+        /// Constructor
+        /// Parses the exif metadata from a file
+        /// </summary>
+        /// <param name="file">the file to read</param>
         public Exif(string file) {
-            try {
-                using (ExifReader exif = new ExifReader(file)) {
-                    //exposure
-                    exif.GetTagValue(ExifTags.ShutterSpeedValue, out _shutterSpeed);
-                    exif.GetTagValue(ExifTags.ApertureValue, out _aperture);
-
-                    ushort temp;
-                    exif.GetTagValue(ExifTags.ISOSpeedRatings, out temp);
-                    _iso = (int)temp;
-
-                    exif.GetTagValue(ExifTags.FocalLength, out _focalLength);
-                    exif.GetTagValue(ExifTags.DateTime, out _timeTaken);
-
-                    //camera
-                    exif.GetTagValue(ExifTags.Make, out _cameraMake);
-                    exif.GetTagValue(ExifTags.Model, out _cameraModel);
-
-                    //location
-                    exif.GetTagValue(ExifTags.GPSLatitude, out _latitude);
-                    exif.GetTagValue(ExifTags.GPSLongitude, out _longitude);
-
-                    //author
-                    exif.GetTagValue(ExifTags.Artist, out _author);
-                    exif.GetTagValue(ExifTags.Copyright, out _copyright);
-
-                    //image details
-                    double x, y;
-                    exif.GetTagValue(ExifTags.XResolution, out x);
-                    exif.GetTagValue(ExifTags.YResolution, out y);
-                    _resolution = new Resolution((int)x, (int)y);
-                }
+            using (ExifReader reader = new ExifReader(file)) {
+                ReadExif(reader);
             }
-            catch (ExifLibException) {
-                _shutterSpeed = -1;
-                _aperture = -1;
-                _iso = -1;
-                _focalLength = -1;
-                _timeTaken = DateTime.MinValue;
-                _cameraMake = "unknown";
-                _cameraModel = "unknown";
-                _latitude = -1;
-                _longitude = -1;
-                _author = "unknown";
-                _copyright = "unknown";
-                _resolution = new Resolution(-1, -1);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// Parses the exif metadata from a stream
+        /// </summary>
+        /// <param name="stream">the stream to read</param>
+        public Exif(Stream stream) {
+            using (ExifReader reader = new ExifReader(stream)) {
+                ReadExif(reader);
             }
         }
 
@@ -179,6 +153,53 @@ namespace Obscura.Entities {
             _copyright = copyright;
             _latitude = latitude;
             _longitude = longitude;
+        }
+
+        private void ReadExif(ExifReader exif) {
+            try {
+                //exposure
+                exif.GetTagValue(ExifTags.ShutterSpeedValue, out _shutterSpeed);
+                exif.GetTagValue(ExifTags.ApertureValue, out _aperture);
+
+                ushort temp;
+                exif.GetTagValue(ExifTags.ISOSpeedRatings, out temp);
+                _iso = (int)temp;
+
+                exif.GetTagValue(ExifTags.FocalLength, out _focalLength);
+                exif.GetTagValue(ExifTags.DateTime, out _timeTaken);
+
+                //camera
+                exif.GetTagValue(ExifTags.Make, out _cameraMake);
+                exif.GetTagValue(ExifTags.Model, out _cameraModel);
+
+                //location
+                exif.GetTagValue(ExifTags.GPSLatitude, out _latitude);
+                exif.GetTagValue(ExifTags.GPSLongitude, out _longitude);
+
+                //author
+                exif.GetTagValue(ExifTags.Artist, out _author);
+                exif.GetTagValue(ExifTags.Copyright, out _copyright);
+
+                //image details
+                double x, y;
+                exif.GetTagValue(ExifTags.XResolution, out x);
+                exif.GetTagValue(ExifTags.YResolution, out y);
+                _resolution = new Resolution((int)x, (int)y);
+            }
+            catch (ExifLibException) {
+                _shutterSpeed = -1;
+                _aperture = -1;
+                _iso = -1;
+                _focalLength = -1;
+                _timeTaken = DateTime.MinValue;
+                _cameraMake = "unknown";
+                _cameraModel = "unknown";
+                _latitude = -1;
+                _longitude = -1;
+                _author = "unknown";
+                _copyright = "unknown";
+                _resolution = new Resolution(-1, -1);
+            }
         }
     }
 }
