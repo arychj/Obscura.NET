@@ -107,7 +107,6 @@ namespace Obscura.Entities {
         }
 
         public static Image Create(string originalPath) {
-            //TODO: create
             Image image = null;
             string extension, fileName, newPath, mimeType, resultcode = null;
 
@@ -139,9 +138,31 @@ namespace Obscura.Entities {
             return image;
         }
 
-        public static Image Create(byte[] bytes) {
-            //TODO: create
-            return null;
+        public static Image Create(byte[] bytes, string mimeType) {
+            Image image = null;
+            string extension, fileName, newPath, resultcode = null;
+
+            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
+                Entity entity = Entity.Create(EntityType.Image, string.Empty, string.Empty);
+
+                extension = Common.MimeType.LookupExtension(mimeType);
+                fileName = string.Format("{0}.{1}", entity.Id, extension);
+                newPath = string.Format(@"{0}\{1}", Settings.GetSetting("ImageDirectory"), fileName);
+
+                File.WriteAllBytes(newPath, bytes);
+                Exif exif = new Exif(newPath);
+
+                db.xspUpdateImage(entity.Id, fileName, mimeType, exif.Resolution.X, exif.Resolution.Y, ref resultcode);
+
+                if (resultcode == "SUCCESS") {
+                    image = new Image(entity, newPath, mimeType, exif.Resolution);
+                }
+                else
+                    throw new ObscuraException(string.Format("Unable to create Image. ({0})", resultcode));
+
+            }
+
+            return image;
         }
 
         public static byte[] ResizeImage(byte[] image, int targetSize) {
