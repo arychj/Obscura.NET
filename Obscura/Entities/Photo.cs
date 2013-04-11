@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Obscura.Common;
-using Obscura.Images;
 
 namespace Obscura.Entities {
 

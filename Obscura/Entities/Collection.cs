@@ -1,10 +1,8 @@
-﻿    using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-using Obscura.Images;
 
 namespace Obscura.Entities {
     public class Collection : Entity {
@@ -17,7 +15,7 @@ namespace Obscura.Entities {
             get { return _thumbnail; }
         }
 
-        public EntityCollection<Entity> Entities {
+        public EntityCollection Entities {
             get { return _entities; }
         }
 

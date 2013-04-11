@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Obscura.Images {
+namespace Obscura.Entities {
     public class Resolution {
         private int _x, _y;
 
@@ -15,6 +15,8 @@ namespace Obscura.Images {
         public int Y {
             get { return _y; }
         }
+
+        internal Resolution() { }
 
         internal Resolution(int x, int y) {
             _x = x;

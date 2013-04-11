@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Obscura.Images;
-
 namespace Obscura.Entities {
     public class Album : Entity {
         private List<Photo> _photos;

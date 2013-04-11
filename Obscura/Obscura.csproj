@@ -46,6 +46,8 @@
     <Compile Include="Cache.cs" />
     <Compile Include="Common\ClientTools.cs" />
     <Compile Include="Common\Config.cs" />
+    <Compile Include="Common\DataTools.cs" />
+    <Compile Include="Common\MimeType.cs" />
     <Compile Include="Common\ObscuraException.cs" />
     <Compile Include="Common\User.cs" />
     <Compile Include="Entities\Album.cs" />
@@ -54,11 +56,13 @@
     <Compile Include="Entities\EntityCollection.cs" />
     <Compile Include="Entities\Enums.cs" />
     <Compile Include="Entities\Video.cs" />
-    <Compile Include="Images\Exif.cs" />
+    <Compile Include="Entities\Exif.cs" />
     <Compile Include="Common\DateTimeSet.cs" />
     <Compile Include="Gallery.cs" />
-    <Compile Include="Images\Image.cs" />
-    <Compile Include="Images\Resolution.cs" />
+    <Compile Include="Entities\ExifReader.cs" />
+    <Compile Include="Entities\ExifTags.cs" />
+    <Compile Include="Entities\Image.cs" />
+    <Compile Include="Entities\Resolution.cs" />
     <Compile Include="Entities\Journal.cs" />
     <Compile Include="Entities\Photo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
