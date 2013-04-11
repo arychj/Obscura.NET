@@ -109,7 +109,7 @@ namespace Obscura.Entities {
         public static Image Create(string originalPath) {
             //TODO: create
             Image image = null;
-            string extension, newPath, mimeType, resultcode = null;
+            string extension, fileName, newPath, mimeType, resultcode = null;
 
             if (File.Exists(originalPath)) {
                 using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
@@ -117,12 +117,13 @@ namespace Obscura.Entities {
 
                     extension = Path.GetExtension(originalPath).TrimStart('.');
                     mimeType = Common.MimeType.ParseExtension(extension);
-                    newPath = string.Format(@"{0}\{1}.{2}", Settings.GetSetting("ImageDirectory"), entity.Id, extension);
+                    fileName = string.Format("{0}.{1}", entity.Id, extension);
+                    newPath = string.Format(@"{0}\{1}", Settings.GetSetting("ImageDirectory"), fileName);
 
                     File.Move(originalPath, newPath);
                     Exif exif = new Exif(newPath);
 
-                    db.xspUpdateImage(entity.Id, newPath, exif.Resolution.X, exif.Resolution.Y, ref resultcode);
+                    db.xspUpdateImage(entity.Id, fileName, mimeType, exif.Resolution.X, exif.Resolution.Y, ref resultcode);
 
                     if (resultcode == "SUCCESS") {
                         image = new Image(entity, newPath, mimeType, exif.Resolution);

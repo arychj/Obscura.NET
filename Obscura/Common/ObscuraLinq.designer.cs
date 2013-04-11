@@ -157,10 +157,10 @@ namespace Obscura.Common
 		}
 		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspUpdateImage")]
-		public ISingleResult<xspUpdateImageResult> xspUpdateImage([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(1000)")] string path, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> resolutionX, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> resolutionY, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		public ISingleResult<xspUpdateImageResult> xspUpdateImage([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(1000)")] string path, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string mimetype, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> resolutionX, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> resolutionY, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
 		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, path, resolutionX, resolutionY, resultcode);
-			resultcode = ((string)(result.GetParameterValue(4)));
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, path, mimetype, resolutionX, resolutionY, resultcode);
+			resultcode = ((string)(result.GetParameterValue(5)));
 			return ((ISingleResult<xspUpdateImageResult>)(result.ReturnValue));
 		}
 	}
