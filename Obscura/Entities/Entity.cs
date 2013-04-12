@@ -121,8 +121,19 @@ namespace Obscura.Entities {
         /// Retrieves an Entity from the database
         /// </summary>
         /// <param name="id">the id of the Entity</param>
-        public Entity(int id) {
+        internal Entity(int id) : this(id, false) { }
+
+        /// <summary>
+        /// Constructor
+        /// Retrieves an Entity from the database
+        /// </summary>
+        /// <param name="id">the id of the Entity</param>
+        /// <param name="loadImemdiately">Load the Entity's contents immediately</param>
+        internal Entity(int id, bool loadImemdiately) {
             _id = id;
+
+            if (loadImemdiately)
+                Load();
         }
 
         /// <summary>
@@ -210,7 +221,7 @@ namespace Obscura.Entities {
         }
 
         /// <summary>
-        /// Loads the Entity
+        /// Loads the Entity's details
         /// </summary>
         private void Load() {
             if (!_loaded) {
@@ -225,7 +236,7 @@ namespace Obscura.Entities {
                     if (resultcode == "SUCCESS") {
                         _typeid = (typeid == null ? 0 : (int)typeid);
                         _type = (EntityType)Enum.Parse(typeof(EntityType), type);
-                        _title = Title;
+                        _title = title;
                         _description = description;
                         _hitcount = (hitcount == null ? 0 : (int)hitcount);
                         _dates = new DateTimeSet((DateTime)dtCreated, (DateTime)dtModified);
@@ -271,6 +282,15 @@ namespace Obscura.Entities {
                 throw new ObscuraException(string.Format("Unable to create Entity. ({0})", resultcode));
 
             return entity;
+        }
+
+        /// <summary>
+        /// Retrieves the specified Entity
+        /// </summary>
+        /// <param name="id">the id of the Entity to retrieve</param>
+        /// <returns>the Entity</returns>
+        public static Entity Retrieve(int id) {
+            return new Entity(id, true);
         }
     }
 }
