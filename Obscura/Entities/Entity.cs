@@ -12,6 +12,8 @@ namespace Obscura.Entities {
     /// The base class for all Entities
     /// </summary>
     public class Entity {
+        private bool _loaded = false;
+
         private int _id, _typeid;
         private EntityType _type;
         private DateTimeSet _dates;
@@ -32,8 +34,11 @@ namespace Obscura.Entities {
         /// Is this Entity active?
         /// </summary>
         public bool IsActive {
-            get { return _active; }
+            get { 
+                Load(); 
+                return _active; }
             set {
+                Load(); 
                 Update(value, null, null);
                 _active = value;
             }
@@ -43,29 +48,42 @@ namespace Obscura.Entities {
         /// This Entity's type
         /// </summary>
         public EntityType Type {
-            get { return _type; }
+            get {
+                Load(); 
+                return _type;
+            }
         }
 
         /// <summary>
         /// The ID of this Entity's EntityType
         /// </summary>
         internal int TypeId {
-            get { return _typeid; }
+            get {
+                Load(); 
+                return _typeid;
+            }
         }
 
         /// <summary>
         /// The number of times this Entity has been accesses
         /// </summary>
         public int HitCount {
-            get { return _hitcount; }
+            get {
+                Load(); 
+                return _hitcount;
+            }
         }
 
         /// <summary>
         /// This Entity's title
         /// </summary>
         public string Title {
-            get { return _title; }
+            get { 
+                Load(); 
+                return _title; 
+            }
             set {
+                Load();
                 Update(null, value, null);
                 _title = value;
             }
@@ -75,8 +93,12 @@ namespace Obscura.Entities {
         /// This Entity's description
         /// </summary>
         public string Description {
-            get { return _description; }
+            get { 
+                Load(); 
+                return _description;
+            }
             set {
+                Load();
                 Update(null, null, value);
                 _description = value;
             }
@@ -86,7 +108,10 @@ namespace Obscura.Entities {
         /// Important dates associated with this Entity
         /// </summary>
         public DateTimeSet Dates {
-            get { return _dates; }
+            get {
+                Load();
+                return _dates; 
+            }
         }
 
         #endregion
@@ -98,28 +123,6 @@ namespace Obscura.Entities {
         /// <param name="id">the id of the Entity</param>
         public Entity(int id) {
             _id = id;
-
-            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
-                int? typeid = null, hitcount = null;
-                string type = null, title = null, description = null, resultcode = null;
-                DateTime? dtCreated = null, dtModified = null;
-                bool? tfActive = null;
-
-                db.xspGetEntity(id, ref typeid, ref type, ref title, ref description, ref hitcount, ref dtCreated, ref dtModified, ref tfActive, ref resultcode);
-
-                if (resultcode == "SUCCESS") {
-                    _id = id;
-                    _typeid = (typeid == null ? 0 : (int)typeid);
-                    _type = (EntityType)Enum.Parse(typeof(EntityType), type);
-                    _title = Title;
-                    _description = description;
-                    _hitcount = (hitcount == null ? 0 : (int)hitcount);
-                    _dates = new DateTimeSet((DateTime)dtCreated, (DateTime)dtModified);
-                    _active = (tfActive == null ? false : (bool)tfActive);
-                }
-                else
-                    throw new ObscuraException(string.Format("Entity ID {0} does not exist. ({1})", id, resultcode));
-            }
         }
 
         /// <summary>
@@ -204,6 +207,36 @@ namespace Obscura.Entities {
 
             if (resultcode != "SUCCESS")
                 throw new ObscuraException(string.Format("Unable to delete Entity ID {0}", _id));
+        }
+
+        /// <summary>
+        /// Loads the Entity
+        /// </summary>
+        private void Load() {
+            if (!_loaded) {
+                using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
+                    int? typeid = null, hitcount = null;
+                    string type = null, title = null, description = null, resultcode = null;
+                    DateTime? dtCreated = null, dtModified = null;
+                    bool? tfActive = null;
+
+                    db.xspGetEntity(_id, ref typeid, ref type, ref title, ref description, ref hitcount, ref dtCreated, ref dtModified, ref tfActive, ref resultcode);
+
+                    if (resultcode == "SUCCESS") {
+                        _typeid = (typeid == null ? 0 : (int)typeid);
+                        _type = (EntityType)Enum.Parse(typeof(EntityType), type);
+                        _title = Title;
+                        _description = description;
+                        _hitcount = (hitcount == null ? 0 : (int)hitcount);
+                        _dates = new DateTimeSet((DateTime)dtCreated, (DateTime)dtModified);
+                        _active = (tfActive == null ? false : (bool)tfActive);
+                    }
+                    else
+                        throw new ObscuraException(string.Format("Entity ID {0} does not exist. ({1})", _id, resultcode));
+                }
+
+                _loaded = true;
+            }
         }
 
         /// <summary>
