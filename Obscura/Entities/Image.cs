@@ -89,6 +89,11 @@ namespace Obscura.Entities {
 
         #endregion
 
+        /// <summary>
+        /// Constructor
+        /// Loads an image by id
+        /// </summary>
+        /// <param name="id">the id to load</param>
         public Image(int id) : base(id) {
             int? resolutionX = null, resolutionY = null;
             string resultcode = null;
@@ -104,6 +109,14 @@ namespace Obscura.Entities {
                 throw new ObscuraException(string.Format("Unable to load Image ID {0}. ({1})", id, resultcode));
         }
 
+        /// <summary>
+        /// Constructor
+        /// Self constructor
+        /// </summary>
+        /// <param name="entity">the Image's base Entity</param>
+        /// <param name="path">the path to the Image's file</param>
+        /// <param name="mimeType">the MimeType of the Image</param>
+        /// <param name="exif">the exif data associated with the Image</param>
         internal Image(Entity entity, string path, string mimeType, Exif exif)
             : base(entity) {
                 _filePath = path;
@@ -112,6 +125,10 @@ namespace Obscura.Entities {
                 _resolution = exif.Resolution;
         }
 
+        /// <summary>
+        /// Writes the Image's contents to the response stream
+        /// </summary>
+        /// <param name="response">the response object to write to</param>
         public void Write(HttpResponse response) {
             int seq;
             byte[] buffer = new byte[4096];
@@ -130,21 +147,26 @@ namespace Obscura.Entities {
             fs.Close();
         }
 
-        public static Image Create(string originalPath) {
+        /// <summary>
+        /// Creates a new Image
+        /// </summary>
+        /// <param name="sourcePath">the source file for the image</param>
+        /// <returns>a new Image</returns>
+        public static Image Create(string sourcePath) {
             Image image = null;
-            string extension, fileName, newPath, mimeType, resultcode = null;
+            string extension, fileName, destPath, mimeType, resultcode = null;
 
-            if (File.Exists(originalPath)) {
+            if (File.Exists(sourcePath)) {
                 using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
                     Entity entity = Entity.Create(EntityType.Image, string.Empty, string.Empty);
 
-                    extension = Path.GetExtension(originalPath).TrimStart('.');
+                    extension = Path.GetExtension(sourcePath).TrimStart('.');
                     mimeType = Common.MimeType.ParseExtension(extension);
                     fileName = string.Format("{0}.{1}", entity.Id, extension);
-                    newPath = string.Format(@"{0}\{1}", Settings.GetSetting("ImageDirectory"), fileName);
+                    destPath = string.Format(@"{0}\{1}", Settings.GetSetting("ImageDirectory"), fileName);
 
-                    File.Move(originalPath, newPath);
-                    Exif exif = new Exif(newPath);
+                    File.Move(sourcePath, destPath);
+                    Exif exif = new Exif(destPath);
 
                     db.xspUpdateImage(entity.Id, fileName, mimeType, exif.Resolution.X, exif.Resolution.Y, ref resultcode);
 
@@ -157,29 +179,35 @@ namespace Obscura.Entities {
                 }
             }
             else
-                throw new ObscuraException(string.Format("Unable to create Image from '{0}'. File does not exist.", originalPath));
+                throw new ObscuraException(string.Format("Unable to create Image from '{0}'. File does not exist.", sourcePath));
 
             return image;
         }
 
+        /// <summary>
+        /// Creates a new Image
+        /// </summary>
+        /// <param name="bytes">the byte contents of the new Image</param>
+        /// <param name="mimeType">the MimeType of the new Image</param>
+        /// <returns>a new Image</returns>
         public static Image Create(byte[] bytes, string mimeType) {
             Image image = null;
-            string extension, fileName, newPath, resultcode = null;
+            string extension, fileName, destPath, resultcode = null;
 
             using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
                 Entity entity = Entity.Create(EntityType.Image, string.Empty, string.Empty);
 
                 extension = Common.MimeType.LookupExtension(mimeType);
                 fileName = string.Format("{0}.{1}", entity.Id, extension);
-                newPath = string.Format(@"{0}\{1}", Settings.GetSetting("ImageDirectory"), fileName);
+                destPath = string.Format(@"{0}\{1}", Settings.GetSetting("ImageDirectory"), fileName);
 
-                File.WriteAllBytes(newPath, bytes);
-                Exif exif = new Exif(newPath);
+                File.WriteAllBytes(destPath, bytes);
+                Exif exif = new Exif(destPath);
 
                 db.xspUpdateImage(entity.Id, fileName, mimeType, exif.Resolution.X, exif.Resolution.Y, ref resultcode);
 
                 if (resultcode == "SUCCESS") {
-                    image = new Image(entity, newPath, mimeType, exif);
+                    image = new Image(entity, destPath, mimeType, exif);
                     exif.SaveToEntity(entity.Id);
                 }
                 else
