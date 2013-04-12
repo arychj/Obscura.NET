@@ -13,6 +13,8 @@ using Obscura.Common;
 
 namespace Obscura.Entities {
     public class Image : Entity {
+        private bool _loaded = false;
+
         private Resolution _resolution;
         private Exif _exif = null;
         private string _filePath, _mimeType, _url = null, _html = null;
@@ -23,14 +25,20 @@ namespace Obscura.Entities {
         /// The contents of the Image file
         /// </summary>
         public byte[] Bytes {
-            get { return File.ReadAllBytes(_filePath); }
+            get {
+                Load();
+                return File.ReadAllBytes(_filePath);
+            }
         }
 
         /// <summary>
         /// The mime type of the image
         /// </summary>
         public string MimeType {
-            get { return _mimeType; }
+            get {
+                Load(); 
+                return _mimeType;
+            }
         }
 
         /// <summary>
@@ -38,6 +46,7 @@ namespace Obscura.Entities {
         /// </summary>
         public string Url {
             get {
+                Load(); 
                 if (_url == null) {
                     _url = DataTools.BuildString(Settings.GetSetting("ImageUrlFormat"), new Dictionary<string, string>() {
                         {"id", base.Id.ToString()},
@@ -54,7 +63,8 @@ namespace Obscura.Entities {
         /// </summary>
         public string Html {
             get {
-                if(_html == null)
+                Load(); 
+                if (_html == null)
                     _html = string.Format("<img src = \"{0}\" alt = \"{1}\"/>", Url, base.Title);
 
                 return _html;
@@ -66,7 +76,8 @@ namespace Obscura.Entities {
         /// </summary>
         public Exif Exif {
             get {
-                if(_exif == null)
+                Load(); 
+                if (_exif == null)
                     _exif = new Exif(base.Id);
 
                 return _exif;
@@ -77,14 +88,20 @@ namespace Obscura.Entities {
         /// The resolution of the Image
         /// </summary>
         public Resolution Resolution {
-            get { return _resolution; }
+            get { 
+                Load(); 
+                return _resolution; 
+            }
         }
 
         /// <summary>
         /// The local path to the Image file
         /// </summary>
         internal string FilePath {
-            get { return string.Format("{0}/{1}", Settings.GetSetting("ImageDirectory"), _filePath); }
+            get {
+                Load(); 
+                return string.Format("{0}/{1}", Settings.GetSetting("ImageDirectory"), _filePath);
+            }
         }
 
         #endregion
@@ -94,19 +111,18 @@ namespace Obscura.Entities {
         /// Loads an image by id
         /// </summary>
         /// <param name="id">the id to load</param>
-        public Image(int id) : base(id) {
-            int? resolutionX = null, resolutionY = null;
-            string resultcode = null;
+        internal Image(int id) : this(id, false) { }
 
-            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
-                db.xspGetImage(base.Id, ref _filePath, ref _mimeType, ref resolutionX, ref resolutionY, ref resultcode);
-            }
-
-            if (resultcode == "SUCCESS") {
-                _resolution = new Resolution((int)resolutionX, (int)resolutionY);
-            }
-            else
-                throw new ObscuraException(string.Format("Unable to load Image ID {0}. ({1})", id, resultcode));
+        /// <summary>
+        /// Constructor
+        /// Loads an image by id
+        /// </summary>
+        /// <param name="id">the id to load</param>
+        /// <param name="loadImmediately">Loads the Image immediately</param>
+        internal Image(int id, bool loadImmediately)
+            : base(id, loadImmediately) {
+                if (loadImmediately)
+                    Load();
         }
 
         /// <summary>
@@ -123,6 +139,13 @@ namespace Obscura.Entities {
                 _mimeType = mimeType;
                 _exif = exif;
                 _resolution = exif.Resolution;
+        }
+
+        /// <summary>
+        /// Writes the Image's contents to current response stream
+        /// </summary>
+        public void Write() {
+            Write(HttpContext.Current.Response);
         }
 
         /// <summary>
@@ -145,6 +168,28 @@ namespace Obscura.Entities {
             }
 
             fs.Close();
+        }
+
+        /// <summary>
+        /// Loads the Image
+        /// </summary>
+        private void Load() {
+            if (!_loaded) {
+                int? resolutionX = null, resolutionY = null;
+                string resultcode = null;
+
+                using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
+                    db.xspGetImage(base.Id, ref _filePath, ref _mimeType, ref resolutionX, ref resolutionY, ref resultcode);
+                }
+
+                if (resultcode == "SUCCESS") {
+                    _resolution = new Resolution((int)resolutionX, (int)resolutionY);
+                }
+                else
+                    throw new ObscuraException(string.Format("Unable to load Image ID {0}. ({1})", base.Id, resultcode));
+
+                _loaded = true;
+            }
         }
 
         /// <summary>
@@ -216,6 +261,15 @@ namespace Obscura.Entities {
             }
 
             return image;
+        }
+
+        /// <summary>
+        /// Retrieves the specified Image
+        /// </summary>
+        /// <param name="id">the id of the Image to retrieve</param>
+        /// <returns>the Image</returns>
+        new public static Image Retrieve(int id) {
+            return new Image(id, true);
         }
 
         public static byte[] ResizeImage(byte[] image, int targetSize) {
