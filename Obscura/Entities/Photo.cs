@@ -12,7 +12,8 @@ namespace Obscura.Entities {
     /// <summary>
     /// A Photo object
     /// </summary>
-    public class Photo : Entity{
+    public class Photo : Entity {
+        bool _loaded = false;
         private Image _image, _thumbnail;
 
         #region accessors
@@ -21,10 +22,14 @@ namespace Obscura.Entities {
         /// The main Image associated with the Photo
         /// </summary>
         public Image Image {
-            get { return _image; }
+            get {
+                Load();
+                return _image;
+            }
             set {
-                _image = value;
+                Load();
                 Update(null, value.Id);
+                _image = value;
             }
         }
 
@@ -32,10 +37,14 @@ namespace Obscura.Entities {
         /// The thumbnail Image associated with the Photo
         /// </summary>
         public Image Thumbnail {
-            get { return _thumbnail; }
+            get {
+                Load();
+                return _thumbnail;
+            }
             set {
-                _thumbnail = value;
+                Load();
                 Update(value.Id, null);
+                _thumbnail = value;
             }
         }
 
@@ -46,22 +55,18 @@ namespace Obscura.Entities {
         /// Retrieves a Photo
         /// </summary>
         /// <param name="id">the id of the Photo</param>
-        public Photo(int id) 
-            : base(id) {
-            int? entityid = id;
-            int? thumbnailid = null, imageid = null;
-            string resultcode = null;
+        internal Photo(int id) : this(id, false) { }
 
-            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
-                ISingleResult<xspGetPhotoResult> images = db.xspGetPhoto(ref entityid, ref thumbnailid, ref imageid, ref resultcode);
-
-                if (resultcode == "SUCCESS") {
-                    _thumbnail = new Image((int)thumbnailid);
-                    _image = new Image((int)imageid);
-                }
-                else
-                    throw new ObscuraException(string.Format("Photo Entity Id {0} does not exist. ({1})", id, resultcode));
-            }
+        /// <summary>
+        /// Constructor
+        /// Retrieves a Photo
+        /// </summary>
+        /// <param name="id">the id of the Photo</param>
+        /// <param name="loadImmediately">Load the Photo's contents immediately</param>
+        internal Photo(int id, bool loadImmediately)
+            : base(id, loadImmediately) {
+                if (loadImmediately)
+                    Load();
         }
 
         /// <summary>
@@ -96,6 +101,30 @@ namespace Obscura.Entities {
         }
 
         /// <summary>
+        /// Loads the Photo's details
+        /// </summary>
+        private void Load() {
+            if (!_loaded) {
+                int? entityid = base.Id;
+                int? thumbnailid = null, imageid = null;
+                string resultcode = null;
+
+                using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
+                    ISingleResult<xspGetPhotoResult> images = db.xspGetPhoto(ref entityid, ref thumbnailid, ref imageid, ref resultcode);
+
+                    if (resultcode == "SUCCESS") {
+                        _thumbnail = new Image((int)thumbnailid);
+                        _image = new Image((int)imageid);
+                    }
+                    else
+                        throw new ObscuraException(string.Format("Photo Entity Id {0} does not exist. ({1})", base.Id, resultcode));
+                }
+
+                _loaded = true;
+            }
+        }
+
+        /// <summary>
         /// Creates a new photo
         /// </summary>
         /// <param name="title">the title of Photo</param>
@@ -121,6 +150,15 @@ namespace Obscura.Entities {
             }
 
             return photo;
+        }
+
+        /// <summary>
+        /// Retrieves the specified Photo
+        /// </summary>
+        /// <param name="id">the id of the Photo to retrieve</param>
+        /// <returns>the Photo</returns>
+        new public static Photo Retrieve(int id) {
+            return new Photo(id, true);
         }
     }
 }
