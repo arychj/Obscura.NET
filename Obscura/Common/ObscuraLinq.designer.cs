@@ -171,6 +171,14 @@ namespace Obscura.Common
 			resultcode = ((string)(result.GetParameterValue(1)));
 			return ((int)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspUpdateImageExifData")]
+		public ISingleResult<xspUpdateImageExifDataResult> xspUpdateImageExifData([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string type, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string value, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, type, value, resultcode);
+			resultcode = ((string)(result.GetParameterValue(3)));
+			return ((ISingleResult<xspUpdateImageExifDataResult>)(result.ReturnValue));
+		}
 	}
 	
 	public partial class xspUpdatePhotoResult
@@ -285,6 +293,32 @@ namespace Obscura.Common
 		private int _id;
 		
 		public xspUpdateImageResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="Int NOT NULL")]
+		public int id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this._id = value;
+				}
+			}
+		}
+	}
+	
+	public partial class xspUpdateImageExifDataResult
+	{
+		
+		private int _id;
+		
+		public xspUpdateImageExifDataResult()
 		{
 		}
 		

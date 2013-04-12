@@ -6,15 +6,18 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Obscura.Entities {
-    
+    //TODO: save exif to db
+
     /// <summary>
     /// Exchangeable image file format
     /// </summary>
     public class Exif {
-        private double _shutterSpeed, _aperture, _focalLength, _latitude, _longitude;
-        private int _iso;
+        private Dictionary<string, string> _tags;
+
+        private double? _shutterSpeed = null, _aperture = null, _focalLength = null, _latitude = null, _longitude = null;
+        private int? _iso = null;
         private string _lens, _author, _copyright, _cameraMake, _cameraModel;
-        private DateTime _timeTaken;
+        private DateTime? _timeTaken = null;
         private Resolution _resolution;
 
         #region accessors
@@ -23,84 +26,84 @@ namespace Obscura.Entities {
         /// The aperture the image was captured at
         /// </summary>
         public double Aperture {
-            get { return _aperture; }
+            get { return (_tags.ContainsKey("Aperture") ? double.Parse(_tags["Aperture"]) : 0); }
         }
 
         /// <summary>
         /// The length of the exposure
         /// </summary>
         public double ShutterSpeed {
-            get { return _shutterSpeed; }
+            get { return (_tags.ContainsKey("ShutterSpeed") ? double.Parse(_tags["ShutterSpeed"]) : 0); }
         }
 
         /// <summary>
         /// The focal length the image was captured at
         /// </summary>
         public double FocalLength {
-            get { return _focalLength; }
+            get { return (_tags.ContainsKey("FocalLength") ? double.Parse(_tags["FocalLength"]) : 0); }
         }
 
         /// <summary>
         /// The ISO the image was captured at
         /// </summary>
         public int ISO {
-            get { return _iso; }
+            get { return (_tags.ContainsKey("ISOSpeed") ? int.Parse(_tags["ISOSpeed"]) : 0); }
         }
 
         /// <summary>
         /// The time the image was taken
         /// </summary>
         public DateTime TimeTaken {
-            get { return _timeTaken; }
+            get { return (_tags.ContainsKey("TimeTaken") ? DateTime.Parse(_tags["TimeTaken"]) : DateTime.MinValue); }
         }
 
         /// <summary>
         /// The make of the camera which captured the image
         /// </summary>
-        public string CamerMake {
-            get { return _cameraMake; }
+        public string CameraMake {
+            get { return (_tags.ContainsKey("CameraMake") ? _tags["CameraMake"] : "unknown"); }
         }
 
         /// <summary>
         /// The model of the camera which captured the image
         /// </summary>
         public string CameraModel {
-            get { return _cameraModel; }
+            get { return (_tags.ContainsKey("CameraModel") ? _tags["CameraModel"] : "unknown"); }
         }
 
         /// <summary>
         /// The type of lens which was used to capture the image
         /// </summary>
         public string Lens {
-            get { return _lens; }
+            get { return (_tags.ContainsKey("Lens") ? _tags["Lens"] : "unknown"); }
         }
 
         /// <summary>
         /// The author who captured the image
         /// </summary>
         public string Author {
-            get { return _author; }
+            get { return (_tags.ContainsKey("Author") ? _tags["Author"] : "unknown"); }
         }
 
         /// <summary>
         /// THe copyright info associated with the image
         /// </summary>
         public string Copyright {
-            get { return _copyright; }
+            get { return (_tags.ContainsKey("Copyright") ? _tags["Copyright"] : "unknown"); }
         }
 
         /// <summary>
         /// The latitude at which the image was taken
         /// </summary>
         public double Latitude {
-            get { return _latitude; }
+            get { return (_tags.ContainsKey("Latitude") ? double.Parse(_tags["Latitude"]) : 0); }
         }
 
         /// <summary>
         /// The longitude at which the image was taken
         /// </summary>
         public double Longitude {
-            get { return _longitude; }
+            get { return (_tags.ContainsKey("Longitude") ? double.Parse(_tags["Longitude"]) : 0); }
         }
 
         /// <summary>
@@ -108,6 +111,13 @@ namespace Obscura.Entities {
         /// </summary>
         public Resolution Resolution {
             get { return _resolution; }
+        }
+
+        /// <summary>
+        /// The raw exif tags
+        /// </summary>
+        internal Dictionary<string, string> Tags {
+            get { return _tags; }
         }
 
         #endregion accessors
@@ -156,29 +166,46 @@ namespace Obscura.Entities {
         }
 
         private void ReadExif(ExifReader exif) {
+            _tags = new Dictionary<string, string>();
+
+            double d; int i; string s; ushort u; DateTime dt;
             try {
                 //exposure
-                exif.GetTagValue(ExifTags.ShutterSpeedValue, out _shutterSpeed);
-                exif.GetTagValue(ExifTags.ApertureValue, out _aperture);
+                exif.GetTagValue(ExifTags.FNumber, out d);
+                _tags.Add("Aperture", d.ToString());
 
-                ushort temp;
-                exif.GetTagValue(ExifTags.ISOSpeedRatings, out temp);
-                _iso = (int)temp;
+                exif.GetTagValue(ExifTags.ExposureTime, out d);
+                _tags.Add("ShutterSpeed", d.ToString());
 
-                exif.GetTagValue(ExifTags.FocalLength, out _focalLength);
-                exif.GetTagValue(ExifTags.DateTime, out _timeTaken);
+                exif.GetTagValue(ExifTags.ISOSpeedRatings, out u);
+                _tags.Add("ISOSpeed", u.ToString());
+
+                exif.GetTagValue(ExifTags.FocalLength, out d);
+                _tags.Add("FocalLength", d.ToString());
+
+                exif.GetTagValue(ExifTags.DateTime, out dt);
+                _tags.Add("TimeTaken", dt.ToString());
 
                 //camera
-                exif.GetTagValue(ExifTags.Make, out _cameraMake);
-                exif.GetTagValue(ExifTags.Model, out _cameraModel);
+                exif.GetTagValue(ExifTags.Make, out s);
+                _tags.Add("CameraMake", s.ToString());
+
+                exif.GetTagValue(ExifTags.Model, out s);
+                _tags.Add("CameraModel", s.ToString());
 
                 //location
-                exif.GetTagValue(ExifTags.GPSLatitude, out _latitude);
-                exif.GetTagValue(ExifTags.GPSLongitude, out _longitude);
+                exif.GetTagValue(ExifTags.GPSLatitude, out d);
+                _tags.Add("Latitude", d.ToString());
+
+                exif.GetTagValue(ExifTags.GPSLongitude, out d);
+                _tags.Add("Longitude", d.ToString());
 
                 //author
-                exif.GetTagValue(ExifTags.Artist, out _author);
-                exif.GetTagValue(ExifTags.Copyright, out _copyright);
+                exif.GetTagValue(ExifTags.Artist, out s);
+                _tags.Add("Author", s.ToString());
+
+                exif.GetTagValue(ExifTags.Copyright, out s);
+                _tags.Add("Copyright", s.ToString());
 
                 //image details
                 double x, y;
@@ -186,20 +213,7 @@ namespace Obscura.Entities {
                 exif.GetTagValue(ExifTags.YResolution, out y);
                 _resolution = new Resolution((int)x, (int)y);
             }
-            catch (ExifLibException) {
-                _shutterSpeed = -1;
-                _aperture = -1;
-                _iso = -1;
-                _focalLength = -1;
-                _timeTaken = DateTime.MinValue;
-                _cameraMake = "unknown";
-                _cameraModel = "unknown";
-                _latitude = -1;
-                _longitude = -1;
-                _author = "unknown";
-                _copyright = "unknown";
-                _resolution = new Resolution(-1, -1);
-            }
+            catch (ExifLibException) { }
         }
     }
 }

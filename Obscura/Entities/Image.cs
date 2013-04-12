@@ -19,14 +19,23 @@ namespace Obscura.Entities {
 
         #region accessors
 
+        /// <summary>
+        /// The contents of the Image file
+        /// </summary>
         public byte[] Bytes {
             get { return File.ReadAllBytes(_filePath); }
         }
 
+        /// <summary>
+        /// The mime type of the image
+        /// </summary>
         public string MimeType {
             get { return _mimeType; }
         }
 
+        /// <summary>
+        /// The URL to the image
+        /// </summary>
         public string Url {
             get {
                 if (_url == null) {
@@ -40,6 +49,9 @@ namespace Obscura.Entities {
             }
         }
 
+        /// <summary>
+        /// The HTML tag for the image
+        /// </summary>
         public string Html {
             get {
                 if(_html == null)
@@ -49,6 +61,9 @@ namespace Obscura.Entities {
             }
         }
 
+        /// <summary>
+        /// The Exif data associated with the Image
+        /// </summary>
         public Exif Exif {
             get {
                 //TODO: exif from db
@@ -59,10 +74,16 @@ namespace Obscura.Entities {
             }
         }
 
+        /// <summary>
+        /// The resolution of the Image
+        /// </summary>
         public Resolution Resolution {
             get { return _resolution; }
         }
 
+        /// <summary>
+        /// The local path to the Image file
+        /// </summary>
         internal string FilePath {
             get { return string.Format("{0}/{1}", Settings.GetSetting("ImageDirectory"), _filePath); }
         }
@@ -130,10 +151,16 @@ namespace Obscura.Entities {
 
                     if (resultcode == "SUCCESS") {
                         image = new Image(entity, fileName, mimeType, exif);
+
+                        foreach (KeyValuePair<string, string> tag in exif.Tags) {
+                            db.xspUpdateImageExifData(entity.Id, tag.Key, tag.Value, ref resultcode);
+
+                            if(resultcode != "SUCCESS")
+                                throw new ObscuraException(string.Format("Unable to create Image exif entry ({0}/{1}). ({2})", tag.Key, tag.Value, resultcode));
+                        }
                     }
                     else
                         throw new ObscuraException(string.Format("Unable to create Image. ({0})", resultcode));
-
                 }
             }
             else
@@ -160,6 +187,13 @@ namespace Obscura.Entities {
 
                 if (resultcode == "SUCCESS") {
                     image = new Image(entity, newPath, mimeType, exif);
+
+                    foreach (KeyValuePair<string, string> tag in exif.Tags) {
+                        db.xspUpdateImageExifData(entity.Id, tag.Key, tag.Value, ref resultcode);
+
+                        if (resultcode != "SUCCESS")
+                            throw new ObscuraException(string.Format("Unable to create Image exif entry ({0}/{1}). ({2})", tag.Key, tag.Value, resultcode));
+                    }
                 }
                 else
                     throw new ObscuraException(string.Format("Unable to create Image. ({0})", resultcode));
