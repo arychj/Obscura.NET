@@ -66,9 +66,8 @@ namespace Obscura.Entities {
         /// </summary>
         public Exif Exif {
             get {
-                //TODO: exif from db
                 if(_exif == null)
-                    _exif = new Exif(FilePath);
+                    _exif = new Exif(base.Id);
 
                 return _exif;
             }
@@ -151,13 +150,7 @@ namespace Obscura.Entities {
 
                     if (resultcode == "SUCCESS") {
                         image = new Image(entity, fileName, mimeType, exif);
-
-                        foreach (KeyValuePair<string, string> tag in exif.Tags) {
-                            db.xspUpdateImageExifData(entity.Id, tag.Key, tag.Value, ref resultcode);
-
-                            if(resultcode != "SUCCESS")
-                                throw new ObscuraException(string.Format("Unable to create Image exif entry ({0}/{1}). ({2})", tag.Key, tag.Value, resultcode));
-                        }
+                        exif.SaveToEntity(entity.Id);
                     }
                     else
                         throw new ObscuraException(string.Format("Unable to create Image. ({0})", resultcode));
@@ -187,13 +180,7 @@ namespace Obscura.Entities {
 
                 if (resultcode == "SUCCESS") {
                     image = new Image(entity, newPath, mimeType, exif);
-
-                    foreach (KeyValuePair<string, string> tag in exif.Tags) {
-                        db.xspUpdateImageExifData(entity.Id, tag.Key, tag.Value, ref resultcode);
-
-                        if (resultcode != "SUCCESS")
-                            throw new ObscuraException(string.Format("Unable to create Image exif entry ({0}/{1}). ({2})", tag.Key, tag.Value, resultcode));
-                    }
+                    exif.SaveToEntity(entity.Id);
                 }
                 else
                     throw new ObscuraException(string.Format("Unable to create Image. ({0})", resultcode));

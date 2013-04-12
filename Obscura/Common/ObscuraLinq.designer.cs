@@ -179,6 +179,14 @@ namespace Obscura.Common
 			resultcode = ((string)(result.GetParameterValue(3)));
 			return ((ISingleResult<xspUpdateImageExifDataResult>)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspGetImageExifData")]
+		public ISingleResult<xspGetImageExifDataResult> xspGetImageExifData([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, resultcode);
+			resultcode = ((string)(result.GetParameterValue(1)));
+			return ((ISingleResult<xspGetImageExifDataResult>)(result.ReturnValue));
+		}
 	}
 	
 	public partial class xspUpdatePhotoResult
@@ -334,6 +342,50 @@ namespace Obscura.Common
 				if ((this._id != value))
 				{
 					this._id = value;
+				}
+			}
+		}
+	}
+	
+	public partial class xspGetImageExifDataResult
+	{
+		
+		private string _Type;
+		
+		private string _Value;
+		
+		public xspGetImageExifDataResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Type", DbType="VarChar(50)")]
+		public string Type
+		{
+			get
+			{
+				return this._Type;
+			}
+			set
+			{
+				if ((this._Type != value))
+				{
+					this._Type = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Value", DbType="VarChar(50)")]
+		public string Value
+		{
+			get
+			{
+				return this._Value;
+			}
+			set
+			{
+				if ((this._Value != value))
+				{
+					this._Value = value;
 				}
 			}
 		}

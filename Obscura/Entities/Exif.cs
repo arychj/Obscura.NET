@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Linq;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+using Obscura.Common;
 
 namespace Obscura.Entities {
     //TODO: save exif to db
@@ -13,11 +16,6 @@ namespace Obscura.Entities {
     /// </summary>
     public class Exif {
         private Dictionary<string, string> _tags;
-
-        private double? _shutterSpeed = null, _aperture = null, _focalLength = null, _latitude = null, _longitude = null;
-        private int? _iso = null;
-        private string _lens, _author, _copyright, _cameraMake, _cameraModel;
-        private DateTime? _timeTaken = null;
         private Resolution _resolution;
 
         #region accessors
@@ -146,71 +144,92 @@ namespace Obscura.Entities {
 
         /// <summary>
         /// Constructor
+        /// Loads exif data from an Entity
         /// </summary>
-        /// <param name="aperture">the aperture the image was captured at</param>
-        /// <param name="shutterSpeed">the length of the exposure</param>
-        /// <param name="focalLength">the focal length the image was catured at</param>
-        /// <param name="iso">the ISO the image was captured at</param>
-        /// <param name="lens">the lens which was used to capture the image</param>
-        internal Exif(double aperture, int shutterSpeed, double focalLength, int iso, string lens, DateTime timeTaken, string author, string copyright, double latitude, double longitude) {
-            _aperture = aperture;
-            _shutterSpeed = shutterSpeed;
-            _focalLength = focalLength;
-            _iso = iso;
-            _lens = lens;
-            _timeTaken = timeTaken;
-            _author = author;
-            _copyright = copyright;
-            _latitude = latitude;
-            _longitude = longitude;
+        /// <param name="entityid">the Entity id to load</param>
+        internal Exif(int entityid) {
+            string resultcode = null;
+
+            _tags = new Dictionary<string, string>();
+            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
+                ISingleResult<xspGetImageExifDataResult> tags = db.xspGetImageExifData(entityid, ref resultcode);
+
+                if (resultcode == "SUCCESS") {
+                    foreach (xspGetImageExifDataResult tag in tags)
+                        _tags.Add(tag.Type, tag.Value);
+                }
+                else
+                    throw new ObscuraException(string.Format("Unable to retreive exif data for Entity Id {0}. ({1})", entityid, resultcode));
+            }
         }
 
-        private void ReadExif(ExifReader exif) {
+        /// <summary>
+        /// Saves the exif data to an Entity
+        /// </summary>
+        /// <param name="entityid">the Entity id to save to</param>
+        internal void SaveToEntity(int entityid) {
+            string resultcode = null;
+
+            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
+                foreach (KeyValuePair<string, string> tag in _tags) {
+                    db.xspUpdateImageExifData(entityid, tag.Key, tag.Value, ref resultcode);
+
+                    if (resultcode != "SUCCESS")
+                        throw new ObscuraException(string.Format("Unable to create Image exif entry ({0}/{1}). ({2})", tag.Key, tag.Value, resultcode));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Reade the Image's exif data
+        /// </summary>
+        /// <param name="reader">the reader to read from</param>
+        private void ReadExif(ExifReader reader) {
             _tags = new Dictionary<string, string>();
 
             double d; int i; string s; ushort u; DateTime dt;
             try {
                 //exposure
-                exif.GetTagValue(ExifTags.FNumber, out d);
+                reader.GetTagValue(ExifTags.FNumber, out d);
                 _tags.Add("Aperture", d.ToString());
 
-                exif.GetTagValue(ExifTags.ExposureTime, out d);
+                reader.GetTagValue(ExifTags.ExposureTime, out d);
                 _tags.Add("ShutterSpeed", d.ToString());
 
-                exif.GetTagValue(ExifTags.ISOSpeedRatings, out u);
+                reader.GetTagValue(ExifTags.ISOSpeedRatings, out u);
                 _tags.Add("ISOSpeed", u.ToString());
 
-                exif.GetTagValue(ExifTags.FocalLength, out d);
+                reader.GetTagValue(ExifTags.FocalLength, out d);
                 _tags.Add("FocalLength", d.ToString());
 
-                exif.GetTagValue(ExifTags.DateTime, out dt);
+                reader.GetTagValue(ExifTags.DateTime, out dt);
                 _tags.Add("TimeTaken", dt.ToString());
 
                 //camera
-                exif.GetTagValue(ExifTags.Make, out s);
+                reader.GetTagValue(ExifTags.Make, out s);
                 _tags.Add("CameraMake", s.ToString());
 
-                exif.GetTagValue(ExifTags.Model, out s);
+                reader.GetTagValue(ExifTags.Model, out s);
                 _tags.Add("CameraModel", s.ToString());
 
                 //location
-                exif.GetTagValue(ExifTags.GPSLatitude, out d);
+                reader.GetTagValue(ExifTags.GPSLatitude, out d);
                 _tags.Add("Latitude", d.ToString());
 
-                exif.GetTagValue(ExifTags.GPSLongitude, out d);
+                reader.GetTagValue(ExifTags.GPSLongitude, out d);
                 _tags.Add("Longitude", d.ToString());
 
                 //author
-                exif.GetTagValue(ExifTags.Artist, out s);
+                reader.GetTagValue(ExifTags.Artist, out s);
                 _tags.Add("Author", s.ToString());
 
-                exif.GetTagValue(ExifTags.Copyright, out s);
+                reader.GetTagValue(ExifTags.Copyright, out s);
                 _tags.Add("Copyright", s.ToString());
 
                 //image details
                 double x, y;
-                exif.GetTagValue(ExifTags.XResolution, out x);
-                exif.GetTagValue(ExifTags.YResolution, out y);
+                reader.GetTagValue(ExifTags.XResolution, out x);
+                reader.GetTagValue(ExifTags.YResolution, out y);
                 _resolution = new Resolution((int)x, (int)y);
             }
             catch (ExifLibException) { }
