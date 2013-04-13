@@ -296,11 +296,16 @@ namespace Obscura.Entities {
         #region equality
 
         public static bool operator ==(Entity a, Entity b) {
-            return a.Id == b.Id;
+            if (System.Object.ReferenceEquals(a, b))
+                return true;
+            else if (((object)a == null) || ((object)b == null))
+                return false;
+            else
+                return a.Id == b.Id;
         }
 
         public static bool operator !=(Entity a, Entity b) {
-            return a.Id != b.Id;
+            return !(a == b);
         }
 
         public override int GetHashCode() {
