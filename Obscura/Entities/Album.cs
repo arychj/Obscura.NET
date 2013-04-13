@@ -26,7 +26,12 @@ namespace Obscura.Entities {
         public Image Thumbnail {
             get { 
                 Load();
-                return _thumbnail; 
+                return _thumbnail;
+            }
+            set {
+                Load();
+                Update(value.Id, null);
+                _thumbnail = value;
             }
         }
 
@@ -37,6 +42,11 @@ namespace Obscura.Entities {
             get {
                 Load();
                 return _cover;
+            }
+            set {
+                Load();
+                Update(null, value.Id);
+                _cover = value;
             }
         }
 
