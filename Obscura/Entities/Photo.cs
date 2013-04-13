@@ -77,7 +77,7 @@ namespace Obscura.Entities {
         /// <param name="photoid">the internal id of this photo</param>
         /// <param name="thumbnailid">the id of the thumbnail Image associated with this photo</param>
         /// <param name="imageid">the id of the main Image associated with this photos</param>
-        internal Photo(Entity entity, int photoid, int thumbnailid, int imageid)
+        internal Photo(Entity entity, int thumbnailid, int imageid)
             : base(entity) {
             _thumbnail = new Image(thumbnailid);
             _image = new Image(imageid);
@@ -135,7 +135,6 @@ namespace Obscura.Entities {
         public static Photo Create(string title, string description, int thumbnailid, int imageid) {
             Photo photo = null;
             Entity entity;
-            int? photoid = -1;
             string resultcode = null;
 
             using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
@@ -143,7 +142,7 @@ namespace Obscura.Entities {
                 db.xspUpdatePhoto(entity.Id, thumbnailid, imageid, ref resultcode);
 
                 if (resultcode == "SUCCESS") {
-                    photo = new Photo(entity, (int)photoid, thumbnailid, imageid);
+                    photo = new Photo(entity, thumbnailid, imageid);
                 }
                 else
                     throw new ObscuraException(string.Format("Unable to create Photo. ({0})", resultcode));
