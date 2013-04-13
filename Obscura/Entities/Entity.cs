@@ -292,5 +292,33 @@ namespace Obscura.Entities {
         public static Entity Retrieve(int id) {
             return new Entity(id, true);
         }
+
+        #region equality
+
+        public static bool operator ==(Entity a, Entity b) {
+            return a.Id == b.Id;
+        }
+
+        public static bool operator !=(Entity a, Entity b) {
+            return a.Id != b.Id;
+        }
+
+        public override int GetHashCode() {
+            return base.GetHashCode();
+        }
+
+        public override bool Equals(object obj) {
+            Entity e = obj as Entity;
+            if (e == null)
+                return false;
+
+            return _id == e.Id;
+        }
+
+        public bool Equals(Entity e) {
+            return _id == e.Id;
+        }
+
+        #endregion
     }
 }
