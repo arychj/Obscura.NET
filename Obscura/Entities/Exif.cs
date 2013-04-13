@@ -9,8 +9,7 @@ using System.Threading.Tasks;
 using Obscura.Common;
 
 namespace Obscura.Entities {
-    //TODO: save exif to db
-
+    
     /// <summary>
     /// Exchangeable image file format
     /// </summary>
