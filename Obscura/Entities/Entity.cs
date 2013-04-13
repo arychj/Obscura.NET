@@ -255,7 +255,7 @@ namespace Obscura.Entities {
         /// </summary>
         /// <param name="type">the type of Entity</param>
         /// <param name="title">the title of the Entity</param>
-        /// <param name="description">the description of the entity</param>
+        /// <param name="description">the description of the Entity</param>
         /// <returns>the new Entity object</returns>
         internal static Entity Create(EntityType type, string title, string description) {
             Entity entity = null;
