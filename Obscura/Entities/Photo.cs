@@ -81,6 +81,7 @@ namespace Obscura.Entities {
             : base(entity) {
             _thumbnail = new Image(thumbnailid);
             _image = new Image(imageid);
+            _loaded = true;
         }
 
         /// <summary>
