@@ -139,6 +139,7 @@ namespace Obscura.Entities {
                 _mimeType = mimeType;
                 _exif = exif;
                 _resolution = exif.Resolution;
+                _loaded = true;
         }
 
         /// <summary>
