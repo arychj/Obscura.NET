@@ -128,11 +128,11 @@ namespace Obscura.Entities {
         /// Retrieves an Entity from the database
         /// </summary>
         /// <param name="id">the id of the Entity</param>
-        /// <param name="loadImemdiately">Load the Entity's contents immediately</param>
-        internal Entity(int id, bool loadImemdiately) {
+        /// <param name="loadImmediately">Load the Entity's contents immediately</param>
+        internal Entity(int id, bool loadImmediately) {
             _id = id;
 
-            if (loadImemdiately)
+            if (loadImmediately)
                 Load();
         }
 
@@ -249,7 +249,7 @@ namespace Obscura.Entities {
                 _loaded = true;
             }
         }
-
+        
         /// <summary>
         /// Creates a new Entity
         /// </summary>
