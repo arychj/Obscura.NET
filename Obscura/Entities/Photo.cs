@@ -96,7 +96,13 @@ namespace Obscura.Entities {
             using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
                 db.xspUpdatePhoto(base.Id, thumbnailid, imageid, ref resultcode);
 
-                if(resultcode != "SUCCESS")
+                if (resultcode == "SUCCESS") {
+                    if (thumbnailid != null)
+                        _thumbnail = new Image((int)thumbnailid);
+                    if (imageid != null)
+                        _image = new Image((int)imageid);
+                }
+                else
                     throw new ObscuraException(string.Format("Unable to update Photo Entity ID {0}. ({1})", base.Id, resultcode));
             }
         }
