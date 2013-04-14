@@ -135,6 +135,7 @@ namespace Obscura.Entities {
 
                 _thumbnail = new Image((int)thumbid);
                 _cover = new Image((int)coverid);
+                _albums = new EntityCollection<Album>(base.Id);
                 _loaded = true;
             }
         }
