@@ -28,27 +28,48 @@ namespace Obscura.Entities {
             }
         }
 
+        /// <summary>
+        /// The body text of the Journal
+        /// </summary>
         public string Body {
             get {
                 Load();
                 return _body;
             }
             set {
+                Load();
                 Update(null, value);
-                _body = value;
             }
         }
 
         #endregion
 
+        /// <summary>
+        /// Constructor
+        /// Retrieves an Journal
+        /// </summary>
+        /// <param name="id">the id of the Journal</param>
         internal Journal(int id) : base(id, false) { }
 
+        /// <summary>
+        /// Constructor
+        /// Retrieves an Journal
+        /// </summary>
+        /// <param name="id">the id of the Journal</param>
+        /// <param name="loadImmediately">Load the Journal's contents immediately</param>
         internal Journal(int id, bool loadImmediately)
             : base(id, loadImmediately){
             if(loadImmediately)
                 Load();
         }
 
+        /// <summary>
+        /// Constructor
+        /// Builds an Journal using the specified parameters
+        /// </summary>
+        /// <param name="entity">the base Entity of this Journal</param>
+        /// <param name="cover">the cover Image associated with this Journal</param>
+        /// <param name="body">the body text associated with this Journal</param>
         internal Journal(Entity entity, Image cover, string body)
             : base(entity) {
                 _cover = cover;
@@ -79,18 +100,68 @@ namespace Obscura.Entities {
             }
         }
 
+        /// <summary>
+        /// Loads the Journal's details
+        /// </summary>
         private void Load() {
             if (!_loaded) {
+                string resultcode = null;
+                int? coverid = null;
+                using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
+                    db.xspGetJournal(base.Id, ref coverid, ref _body, ref resultcode);
+
+                    if (resultcode == "SUCCESS") {
+                        _cover = new Image((int)coverid);
+                        _body = Body;
+                    }
+                    else
+                        throw new ObscuraException(string.Format("Journal Entity Id {0} does not exist. ({1})", base.Id, resultcode));
+
+                }
 
                 _loaded = true;
             }
         }
 
-        public static Journal Create(Entity entity, string title, string body) {
-            //TODO: create journal
-            return null;
+        /// <summary>
+        /// Creates a new Journal
+        /// </summary>
+        /// <param name="cover">the id of the cover Image associated with this Journal</param>
+        /// <param name="title">the title of Journal</param>
+        /// <param name="description">the description of the Journal</param>
+        /// <param name="body">the body text of the Journal</param>
+        /// <returns>a new Journal object</returns>
+        public static Journal Create(Image cover, string title, string description, string body) {
+            Journal journal = null;
+            Entity entity;
+            string resultcode = null;
+
+            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
+                entity = Entity.Create(EntityType.Journal, title, description);
+                db.xspUpdateJournal(
+                    entity.Id,
+                    (cover == null ? null : (int?)cover.Id),
+                    body,
+                    ref resultcode
+                );
+
+                if (resultcode == "SUCCESS") {
+                    journal = new Journal(entity, cover, body);
+                }
+                else {
+                    entity.Delete();
+                    throw new ObscuraException(string.Format("Unable to create Journal. ({0})", resultcode));
+                }
+            }
+
+            return journal;
         }
 
+        /// <summary>
+        /// Retrieves the specified Journal
+        /// </summary>
+        /// <param name="id">the id of the Journal to retrieve</param>
+        /// <returns>the Journal</returns>
         new public static Journal Retrieve(int id) {
             return new Journal(id, true);
         }

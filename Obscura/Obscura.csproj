@@ -78,6 +78,7 @@
       <DependentUpon>ObscuraLinq.dbml</DependentUpon>
     </Compile>
     <Compile Include="Common\Url.cs" />
+    <Compile Include="Web\AjaxManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
