@@ -106,7 +106,7 @@ namespace Obscura.Entities {
                     _members.Add(member);
             }
             else
-                throw new ObscuraException(string.Format("Unable to add member with Entity ID {0} to EntityCollection. ({0})", member.Id, resultcode));
+                throw new ObscuraException(string.Format("Unable to add member with Entity ID {0} to EntityCollection. ({1})", member.Id, resultcode));
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace Obscura.Entities {
             if(resultcode == "SUCCESS")
                 _members.Remove(member);
             else
-                throw new ObscuraException(string.Format("Unable to remove member with Entity ID {0} from EntityCollection. ({0})", member.Id, resultcode));
+                throw new ObscuraException(string.Format("Unable to remove member with Entity ID {0} from EntityCollection. ({1})", member.Id, resultcode));
         }
 
         /// <summary>

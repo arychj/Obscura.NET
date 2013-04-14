@@ -69,22 +69,6 @@ namespace Obscura.Common
 			return ((int)(result.ReturnValue));
 		}
 		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspGetEntity")]
-		public int xspGetEntity([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="TypeId", DbType="Int")] ref System.Nullable<int> typeId, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Type", DbType="VarChar(50)")] ref string type, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Title", DbType="VarChar(50)")] ref string title, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Description", DbType="VarChar(1000)")] ref string description, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Hits", DbType="Int")] ref System.Nullable<int> hits, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="CreatedOn", DbType="DateTime")] ref System.Nullable<System.DateTime> createdOn, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="ModifiedOn", DbType="DateTime")] ref System.Nullable<System.DateTime> modifiedOn, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="IsActive", DbType="Bit")] ref System.Nullable<bool> isActive, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, typeId, type, title, description, hits, createdOn, modifiedOn, isActive, resultcode);
-			typeId = ((System.Nullable<int>)(result.GetParameterValue(1)));
-			type = ((string)(result.GetParameterValue(2)));
-			title = ((string)(result.GetParameterValue(3)));
-			description = ((string)(result.GetParameterValue(4)));
-			hits = ((System.Nullable<int>)(result.GetParameterValue(5)));
-			createdOn = ((System.Nullable<System.DateTime>)(result.GetParameterValue(6)));
-			modifiedOn = ((System.Nullable<System.DateTime>)(result.GetParameterValue(7)));
-			isActive = ((System.Nullable<bool>)(result.GetParameterValue(8)));
-			resultcode = ((string)(result.GetParameterValue(9)));
-			return ((int)(result.ReturnValue));
-		}
-		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspUpdateEntity")]
 		public int xspUpdateEntity([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> typeid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string type, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string title, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(1000)")] string description, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Bit")] System.Nullable<bool> active, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
 		{
@@ -264,6 +248,47 @@ namespace Obscura.Common
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, coverid, body, resultcode);
 			resultcode = ((string)(result.GetParameterValue(3)));
 			return ((ISingleResult<xspUpdateJournalResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspGetEntityTags")]
+		public ISingleResult<xspGetEntityTagsResult> xspGetEntityTags([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, resultcode);
+			resultcode = ((string)(result.GetParameterValue(1)));
+			return ((ISingleResult<xspGetEntityTagsResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspUpdateEntityTag")]
+		public ISingleResult<xspUpdateEntityTagResult> xspUpdateEntityTag([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> id, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string tag, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), id, entityid, tag, resultcode);
+			id = ((System.Nullable<int>)(result.GetParameterValue(0)));
+			resultcode = ((string)(result.GetParameterValue(3)));
+			return ((ISingleResult<xspUpdateEntityTagResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspDeleteEntityTag")]
+		public ISingleResult<xspDeleteEntityTagResult> xspDeleteEntityTag([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string tag, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, tag, resultcode);
+			resultcode = ((string)(result.GetParameterValue(2)));
+			return ((ISingleResult<xspDeleteEntityTagResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspGetEntity")]
+		public ISingleResult<xspGetEntityResult> xspGetEntity([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="TypeId", DbType="Int")] ref System.Nullable<int> typeId, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Type", DbType="VarChar(50)")] ref string type, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Title", DbType="VarChar(50)")] ref string title, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Description", DbType="VarChar(1000)")] ref string description, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Hits", DbType="Int")] ref System.Nullable<int> hits, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="CreatedOn", DbType="DateTime")] ref System.Nullable<System.DateTime> createdOn, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="ModifiedOn", DbType="DateTime")] ref System.Nullable<System.DateTime> modifiedOn, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="IsActive", DbType="Bit")] ref System.Nullable<bool> isActive, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, typeId, type, title, description, hits, createdOn, modifiedOn, isActive, resultcode);
+			typeId = ((System.Nullable<int>)(result.GetParameterValue(1)));
+			type = ((string)(result.GetParameterValue(2)));
+			title = ((string)(result.GetParameterValue(3)));
+			description = ((string)(result.GetParameterValue(4)));
+			hits = ((System.Nullable<int>)(result.GetParameterValue(5)));
+			createdOn = ((System.Nullable<System.DateTime>)(result.GetParameterValue(6)));
+			modifiedOn = ((System.Nullable<System.DateTime>)(result.GetParameterValue(7)));
+			isActive = ((System.Nullable<bool>)(result.GetParameterValue(8)));
+			resultcode = ((string)(result.GetParameterValue(9)));
+			return ((ISingleResult<xspGetEntityResult>)(result.ReturnValue));
 		}
 	}
 	
@@ -568,6 +593,146 @@ namespace Obscura.Common
 				if ((this._id != value))
 				{
 					this._id = value;
+				}
+			}
+		}
+	}
+	
+	public partial class xspGetEntityTagsResult
+	{
+		
+		private int _EntityId;
+		
+		private int _TagId;
+		
+		private string _Tag;
+		
+		public xspGetEntityTagsResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EntityId", DbType="Int NOT NULL")]
+		public int EntityId
+		{
+			get
+			{
+				return this._EntityId;
+			}
+			set
+			{
+				if ((this._EntityId != value))
+				{
+					this._EntityId = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TagId", DbType="Int NOT NULL")]
+		public int TagId
+		{
+			get
+			{
+				return this._TagId;
+			}
+			set
+			{
+				if ((this._TagId != value))
+				{
+					this._TagId = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Tag", DbType="VarChar(50)")]
+		public string Tag
+		{
+			get
+			{
+				return this._Tag;
+			}
+			set
+			{
+				if ((this._Tag != value))
+				{
+					this._Tag = value;
+				}
+			}
+		}
+	}
+	
+	public partial class xspUpdateEntityTagResult
+	{
+		
+		private int _id;
+		
+		public xspUpdateEntityTagResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="Int NOT NULL")]
+		public int id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this._id = value;
+				}
+			}
+		}
+	}
+	
+	public partial class xspDeleteEntityTagResult
+	{
+		
+		private int _id;
+		
+		public xspDeleteEntityTagResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="Int NOT NULL")]
+		public int id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this._id = value;
+				}
+			}
+		}
+	}
+	
+	public partial class xspGetEntityResult
+	{
+		
+		private string _Tag;
+		
+		public xspGetEntityResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Tag", DbType="VarChar(50)")]
+		public string Tag
+		{
+			get
+			{
+				return this._Tag;
+			}
+			set
+			{
+				if ((this._Tag != value))
+				{
+					this._Tag = value;
 				}
 			}
 		}

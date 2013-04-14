@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Linq;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ namespace Obscura.Entities {
         private string _title, _description;
         private int _hitcount;
         private Url _url = null;
+        private TagCollection _tags;
 
         #region accessors
 
@@ -125,6 +127,16 @@ namespace Obscura.Entities {
             }
         }
 
+        /// <summary>
+        /// This Entity's TagCollections
+        /// </summary>
+        public TagCollection Tags {
+            get {
+                Load();
+                return _tags;
+            }
+        }
+
         #endregion
 
         /// <summary>
@@ -183,6 +195,8 @@ namespace Obscura.Entities {
             _hitcount = hitcount;
             _dates = dates;
             _active = active;
+
+            _tags = new TagCollection(this);
         }
 
         /// <summary>
@@ -249,7 +263,7 @@ namespace Obscura.Entities {
                     DateTime? dtCreated = null, dtModified = null;
                     bool? tfActive = null;
 
-                    db.xspGetEntity(_id, ref typeid, ref type, ref title, ref description, ref hitcount, ref dtCreated, ref dtModified, ref tfActive, ref resultcode);
+                    ISingleResult<xspGetEntityResult> results = db.xspGetEntity(_id, ref typeid, ref type, ref title, ref description, ref hitcount, ref dtCreated, ref dtModified, ref tfActive, ref resultcode);
 
                     if (resultcode == "SUCCESS") {
                         _typeid = (typeid == null ? 0 : (int)typeid);
@@ -259,6 +273,12 @@ namespace Obscura.Entities {
                         _hitcount = (hitcount == null ? 0 : (int)hitcount);
                         _dates = new DateTimeSet((DateTime)dtCreated, (DateTime)dtModified);
                         _active = (tfActive == null ? false : (bool)tfActive);
+
+                        List<string> tags = new List<string>();
+                        foreach (xspGetEntityResult result in results)
+                            tags.Add(result.Tag);
+
+                        _tags = new TagCollection(this, tags);
                     }
                     else
                         throw new ObscuraException(string.Format("Entity ID {0} does not exist. ({1})", _id, resultcode));
