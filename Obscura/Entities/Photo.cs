@@ -72,13 +72,12 @@ namespace Obscura.Entities {
         /// Builds a Photo using the specified parameters
         /// </summary>
         /// <param name="entity">the base Entity of this photo</param>
-        /// <param name="photoid">the internal id of this photo</param>
-        /// <param name="thumbnailid">the id of the thumbnail Image associated with this photo</param>
-        /// <param name="imageid">the id of the main Image associated with this photos</param>
-        internal Photo(Entity entity, int thumbnailid, int imageid)
+        /// <param name="thumbnail">the thumbnail Image associated with this photo</param>
+        /// <param name="image">the main Image associated with this photo</param>
+        internal Photo(Entity entity, Image thumbnail, Image image)
             : base(entity) {
-            _thumbnail = new Image(thumbnailid);
-            _image = new Image(imageid);
+            _thumbnail = thumbnail;
+            _image = image;
             _loaded = true;
         }
 
@@ -90,6 +89,9 @@ namespace Obscura.Entities {
         /// <param name="image">the main Image associated with this Photo</param>
         public void Update(Image thumbnail, Image image) {
             string resultcode = null;
+
+            if (image == null)
+                throw new ObscuraException("A Photo's Image may not be null");
 
             using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
                 db.xspUpdatePhoto(
@@ -139,20 +141,27 @@ namespace Obscura.Entities {
         /// </summary>
         /// <param name="title">the title of Photo</param>
         /// <param name="description">the description of the Photo</param>
-        /// <param name="thumbnailid">the id of the thumbnail Image associated with this Photo</param>
-        /// <param name="imageid">the id of the main Image associated with this Photo</param>
+        /// <param name="thumbnail">the thumbnail Image associated with this Photo</param>
+        /// <param name="image">the main Image associated with this Photo</param>
         /// <returns>a new Photo object</returns>
-        public static Photo Create(string title, string description, int thumbnailid, int imageid) {
+        public static Photo Create(string title, string description, Image thumbnail, Image image) {
             Photo photo = null;
             Entity entity;
             string resultcode = null;
 
+            if(image == null)
+                throw new ObscuraException("A Photo's Image may not be null");
+
             using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
                 entity = Entity.Create(EntityType.Photo, title, description);
-                db.xspUpdatePhoto(entity.Id, thumbnailid, imageid, ref resultcode);
+                db.xspUpdatePhoto(
+                    entity.Id,
+                    (thumbnail == null ? null : (int?)thumbnail.Id),
+                    (image == null ? null : (int?)image.Id),
+                    ref resultcode);
 
                 if (resultcode == "SUCCESS") {
-                    photo = new Photo(entity, thumbnailid, imageid);
+                    photo = new Photo(entity, thumbnail, image);
                 }
                 else {
                     entity.Delete();
