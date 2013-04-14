@@ -52,6 +52,7 @@
     <Compile Include="Common\User.cs" />
     <Compile Include="Entities\Album.cs" />
     <Compile Include="Entities\Collection.cs" />
+    <Compile Include="Entities\TagCollection.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityCollection.cs" />
     <Compile Include="Entities\Enums.cs" />
