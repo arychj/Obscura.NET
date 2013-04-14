@@ -28,8 +28,7 @@ namespace Obscura.Entities {
             }
             set {
                 Load();
-                Update(null, value.Id);
-                _image = value;
+                Update(null, value);
             }
         }
 
@@ -43,8 +42,7 @@ namespace Obscura.Entities {
             }
             set {
                 Load();
-                Update(value.Id, null);
-                _thumbnail = value;
+                Update(value, null);
             }
         }
 
@@ -88,19 +86,24 @@ namespace Obscura.Entities {
         /// Updates this Photo
         /// Specify null for any parameters to not update
         /// </summary>
-        /// <param name="thumbnailid">the id of the thumbnail Image associated with this Photo</param>
-        /// <param name="imageid">the id of the main Image associated with this Photo</param>
-        public void Update(int? thumbnailid, int? imageid) {
+        /// <param name="thumbnail">the thumbnail Image associated with this Photo</param>
+        /// <param name="image">the main Image associated with this Photo</param>
+        public void Update(Image thumbnail, Image image) {
             string resultcode = null;
 
             using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
-                db.xspUpdatePhoto(base.Id, thumbnailid, imageid, ref resultcode);
+                db.xspUpdatePhoto(
+                    base.Id, 
+                    (thumbnail == null ? null : (int?)thumbnail.Id),
+                    (image == null ? null : (int?)image.Id), 
+                    ref resultcode
+                );
 
                 if (resultcode == "SUCCESS") {
-                    if (thumbnailid != null)
-                        _thumbnail = new Image((int)thumbnailid);
-                    if (imageid != null)
-                        _image = new Image((int)imageid);
+                    if (thumbnail != null)
+                        _thumbnail = thumbnail;
+                    if (image != null)
+                        _image = image;
                 }
                 else
                     throw new ObscuraException(string.Format("Unable to update Photo Entity ID {0}. ({1})", base.Id, resultcode));

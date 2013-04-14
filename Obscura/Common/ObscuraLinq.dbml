@@ -169,4 +169,19 @@
     <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
     <Return Type="System.Int32" />
   </Function>
+  <Function Name="dbo.xspGetJournal" Method="xspGetJournal">
+    <Parameter Name="entityid" Type="System.Int32" DbType="Int" />
+    <Parameter Name="coverid" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="body" Type="System.String" DbType="Text" Direction="InOut" />
+    <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
+  </Function>
+  <Function Name="dbo.xspUpdateJournal" Method="xspUpdateJournal">
+    <Parameter Name="entityid" Type="System.Int32" DbType="Int" />
+    <Parameter Name="coverid" Type="System.Int32" DbType="Int" />
+    <Parameter Name="body" Type="System.String" DbType="Text" />
+    <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
+    <ElementType Name="xspUpdateJournalResult">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
 </Database>

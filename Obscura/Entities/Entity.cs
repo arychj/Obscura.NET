@@ -40,7 +40,6 @@ namespace Obscura.Entities {
             set {
                 Load(); 
                 Update(value, null, null);
-                _active = value;
             }
         }
 
@@ -85,7 +84,6 @@ namespace Obscura.Entities {
             set {
                 Load();
                 Update(null, value, null);
-                _title = value;
             }
         }
 
@@ -100,7 +98,6 @@ namespace Obscura.Entities {
             set {
                 Load();
                 Update(null, null, value);
-                _description = value;
             }
         }
 
@@ -202,6 +199,13 @@ namespace Obscura.Entities {
 
             if (resultcode == "SUCCESS") {
                 _dates.Modified = DateTime.Now;
+
+                if (title != null)
+                    _title = title;
+                if (description != null)
+                    _description = description;
+                if (active != null)
+                    _active = (bool)active;
             }
             else
                 throw new ObscuraException(string.Format("Unable to update Entity ID {0}. ({1})", _id, resultcode));

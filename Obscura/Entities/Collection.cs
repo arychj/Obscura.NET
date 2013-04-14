@@ -29,8 +29,7 @@ namespace Obscura.Entities {
             }
             set {
                 Load();
-                Update(value.Id, null);
-                _thumbnail = value;
+                Update(value, null);
             }
         }
 
@@ -44,8 +43,7 @@ namespace Obscura.Entities {
             }
             set {
                 Load();
-                Update(null, value.Id);
-                _cover = value;
+                Update(null, value);
             }
         }
 
@@ -99,19 +97,24 @@ namespace Obscura.Entities {
         /// Updates this Collection
         /// Specify null for any parameters to not update
         /// </summary>
-        /// <param name="thumbnailid">the id of the thumbnail Image associated with this Collection</param>
-        /// <param name="coverid">the id of the cover Image associated with this Collection</param>
-        public void Update(int? thumbnailid, int? coverid) {
+        /// <param name="thumbnail">the thumbnail Image associated with this Collection</param>
+        /// <param name="cover">the cover Image associated with this Collection</param>
+        public void Update(Image thumbnail, Image cover) {
             string resultcode = null;
 
             using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
-                db.xspUpdateCollection(base.Id, coverid, thumbnailid, ref resultcode);
+                db.xspUpdateCollection(
+                    base.Id,
+                    (cover == null ? null : (int?)cover.Id),
+                    (thumbnail == null ? null : (int?)thumbnail.Id), 
+                    ref resultcode
+                );
 
                 if (resultcode == "SUCCESS") {
-                    if (thumbnailid != null)
-                        _thumbnail = new Image((int)thumbnailid);
-                    if (coverid != null)
-                        _cover = new Image((int)coverid);
+                    if (thumbnail != null)
+                        _thumbnail = thumbnail;
+                    if (cover != null)
+                        _cover = cover;
                 }
                 else
                     throw new ObscuraException(string.Format("Unable to update Collection Entity ID {0}. ({1})", base.Id, resultcode));

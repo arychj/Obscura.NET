@@ -248,6 +248,23 @@ namespace Obscura.Common
 			resultcode = ((string)(result.GetParameterValue(3)));
 			return ((int)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspGetJournal")]
+		public void xspGetJournal([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> coverid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Text")] ref string body, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, coverid, body, resultcode);
+			coverid = ((System.Nullable<int>)(result.GetParameterValue(1)));
+			body = ((string)(result.GetParameterValue(2)));
+			resultcode = ((string)(result.GetParameterValue(3)));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspUpdateJournal")]
+		public ISingleResult<xspUpdateJournalResult> xspUpdateJournal([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> coverid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Text")] string body, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, coverid, body, resultcode);
+			resultcode = ((string)(result.GetParameterValue(3)));
+			return ((ISingleResult<xspUpdateJournalResult>)(result.ReturnValue));
+		}
 	}
 	
 	public partial class xspUpdatePhotoResult
@@ -510,6 +527,32 @@ namespace Obscura.Common
 		private int _id;
 		
 		public xspUpdateCollectionResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="Int NOT NULL")]
+		public int id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this._id = value;
+				}
+			}
+		}
+	}
+	
+	public partial class xspUpdateJournalResult
+	{
+		
+		private int _id;
+		
+		public xspUpdateJournalResult()
 		{
 		}
 		
