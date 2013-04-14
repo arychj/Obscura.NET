@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Obscura.Entities;
+using Obscura.Common;
 
-namespace Obscura.Common {
+namespace Obscura.Entities {
     
     /// <summary>
     /// An Entity Url

@@ -48,7 +48,7 @@ namespace Obscura.Entities {
             get {
                 Load(); 
                 if (_html == null)
-                    _html = string.Format("<img src = \"{0}\" alt = \"{1}\"/>", Url, base.Title);
+                    _html = string.Format("<img src = \"{0}\" alt = \"{1}\"/>", base.Url, base.Title);
 
                 return _html;
             }

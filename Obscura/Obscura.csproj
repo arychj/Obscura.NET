@@ -77,7 +77,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ObscuraLinq.dbml</DependentUpon>
     </Compile>
-    <Compile Include="Common\Url.cs" />
+    <Compile Include="Entities\Url.cs" />
     <Compile Include="Web\AjaxManager.cs" />
   </ItemGroup>
   <ItemGroup>
