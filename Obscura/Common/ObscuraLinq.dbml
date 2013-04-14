@@ -117,17 +117,6 @@
       <Column Name="Value" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
     </ElementType>
   </Function>
-  <Function Name="dbo.xspGetAlbum" Method="xspGetAlbum">
-    <Parameter Name="entityid" Type="System.Int32" DbType="Int" />
-    <Parameter Name="startat" Type="System.Int32" DbType="Int" />
-    <Parameter Name="pagesize" Type="System.Int32" DbType="Int" />
-    <Parameter Name="coverid" Type="System.Int32" DbType="Int" Direction="InOut" />
-    <Parameter Name="thumbid" Type="System.Int32" DbType="Int" Direction="InOut" />
-    <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
-    <ElementType Name="xspGetAlbumResult">
-      <Column Name="id_entity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-    </ElementType>
-  </Function>
   <Function Name="dbo.xspGetEntityMembers" Method="xspGetEntityMembers">
     <Parameter Name="entityid" Type="System.Int32" DbType="Int" />
     <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
@@ -156,5 +145,28 @@
     <ElementType Name="xspUpdateAlbumResult">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </ElementType>
+  </Function>
+  <Function Name="dbo.xspGetCollection" Method="xspGetCollection">
+    <Parameter Name="entityid" Type="System.Int32" DbType="Int" />
+    <Parameter Name="coverid" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="thumbid" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.xspUpdateCollection" Method="xspUpdateCollection">
+    <Parameter Name="entityid" Type="System.Int32" DbType="Int" />
+    <Parameter Name="coverid" Type="System.Int32" DbType="Int" />
+    <Parameter Name="thumbnailid" Type="System.Int32" DbType="Int" />
+    <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
+    <ElementType Name="xspUpdateCollectionResult">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.xspGetAlbum" Method="xspGetAlbum">
+    <Parameter Name="entityid" Type="System.Int32" DbType="Int" />
+    <Parameter Name="coverid" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="thumbid" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
+    <Return Type="System.Int32" />
   </Function>
 </Database>

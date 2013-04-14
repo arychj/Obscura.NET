@@ -188,16 +188,6 @@ namespace Obscura.Common
 			return ((ISingleResult<xspGetImageExifDataResult>)(result.ReturnValue));
 		}
 		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspGetAlbum")]
-		public ISingleResult<xspGetAlbumResult> xspGetAlbum([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> startat, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> pagesize, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> coverid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> thumbid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, startat, pagesize, coverid, thumbid, resultcode);
-			coverid = ((System.Nullable<int>)(result.GetParameterValue(3)));
-			thumbid = ((System.Nullable<int>)(result.GetParameterValue(4)));
-			resultcode = ((string)(result.GetParameterValue(5)));
-			return ((ISingleResult<xspGetAlbumResult>)(result.ReturnValue));
-		}
-		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspGetEntityMembers")]
 		public ISingleResult<xspGetEntityMembersResult> xspGetEntityMembers([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
 		{
@@ -229,6 +219,34 @@ namespace Obscura.Common
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, coverid, thumbnailid, resultcode);
 			resultcode = ((string)(result.GetParameterValue(3)));
 			return ((ISingleResult<xspUpdateAlbumResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspGetCollection")]
+		public int xspGetCollection([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> coverid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> thumbid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, coverid, thumbid, resultcode);
+			coverid = ((System.Nullable<int>)(result.GetParameterValue(1)));
+			thumbid = ((System.Nullable<int>)(result.GetParameterValue(2)));
+			resultcode = ((string)(result.GetParameterValue(3)));
+			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspUpdateCollection")]
+		public ISingleResult<xspUpdateCollectionResult> xspUpdateCollection([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> coverid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> thumbnailid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, coverid, thumbnailid, resultcode);
+			resultcode = ((string)(result.GetParameterValue(3)));
+			return ((ISingleResult<xspUpdateCollectionResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspGetAlbum")]
+		public int xspGetAlbum([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> coverid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> thumbid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, coverid, thumbid, resultcode);
+			coverid = ((System.Nullable<int>)(result.GetParameterValue(1)));
+			thumbid = ((System.Nullable<int>)(result.GetParameterValue(2)));
+			resultcode = ((string)(result.GetParameterValue(3)));
+			return ((int)(result.ReturnValue));
 		}
 	}
 	
@@ -434,32 +452,6 @@ namespace Obscura.Common
 		}
 	}
 	
-	public partial class xspGetAlbumResult
-	{
-		
-		private int _id_entity;
-		
-		public xspGetAlbumResult()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_entity", DbType="Int NOT NULL")]
-		public int id_entity
-		{
-			get
-			{
-				return this._id_entity;
-			}
-			set
-			{
-				if ((this._id_entity != value))
-				{
-					this._id_entity = value;
-				}
-			}
-		}
-	}
-	
 	public partial class xspGetEntityMembersResult
 	{
 		
@@ -492,6 +484,32 @@ namespace Obscura.Common
 		private int _id;
 		
 		public xspUpdateAlbumResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="Int NOT NULL")]
+		public int id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this._id = value;
+				}
+			}
+		}
+	}
+	
+	public partial class xspUpdateCollectionResult
+	{
+		
+		private int _id;
+		
+		public xspUpdateCollectionResult()
 		{
 		}
 		

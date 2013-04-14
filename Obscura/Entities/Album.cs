@@ -129,7 +129,7 @@ namespace Obscura.Entities {
                 string resultcode = null;
 
                 using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
-                    db.xspGetAlbum(base.Id, 0, null, ref thumbid, ref coverid, ref resultcode);
+                    db.xspGetAlbum(base.Id, ref thumbid, ref coverid, ref resultcode);
 
                     if (resultcode == "SUCCESS") {
                         _cover = new Image((int)coverid);
