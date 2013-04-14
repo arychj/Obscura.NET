@@ -86,10 +86,10 @@ namespace Obscura.Entities {
         /// <param name="cover">the cover Image associated with this Collection</param>
         /// <param name="thumbnail">the thumbnail Image associated with this Collection</param>
         /// <param name="albums">the collection of Albums associated with this Collection</param>
-        internal Collection(Entity entity, Image cover, Image thumbnail, EntityCollection<Album> albums)
+        internal Collection(Entity entity, Image thumbnail, Image cover, EntityCollection<Album> albums)
             : base(entity) {
-                _cover = cover;
                 _thumbnail = thumbnail;
+                _cover = cover;
                 _albums = albums;
         }
 
@@ -147,14 +147,19 @@ namespace Obscura.Entities {
         /// <param name="cover">the cover Image of the Collection</param>
         /// <param name="thumbnail">the thumbnail Image of the Collection</param>
         /// <returns>a new Collection</returns>
-        public static Collection Create(string title, string description, Image cover, Image thumbnail) {
+        public static Collection Create(string title, string description, Image thumbnail, Image cover) {
             Collection collection = null;
             Entity entity;
             string resultcode = null;
 
             using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
                 entity = Entity.Create(EntityType.Collection, title, description);
-                db.xspUpdateCollection(entity.Id, cover.Id, thumbnail.Id, ref resultcode);
+                db.xspUpdateCollection(
+                    entity.Id,
+                    (thumbnail == null ? null : (int?)thumbnail.Id),
+                    (cover == null ? null : (int?)cover.Id),
+                    ref resultcode
+                );
 
                 if (resultcode == "SUCCESS") {
                     collection = new Collection(entity, cover, thumbnail, new EntityCollection<Album>(entity.Id));
