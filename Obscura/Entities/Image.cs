@@ -194,7 +194,11 @@ namespace Obscura.Entities {
                     fileName = string.Format("{0}.{1}", entity.Id, extension);
                     destPath = string.Format(@"{0}\{1}", Settings.GetSetting("ImageDirectory"), fileName);
 
-                    File.Move(sourcePath, destPath);
+                    if(Settings.GetSetting("ImageNewFileAction").ToLower() == "move")
+                        File.Move(sourcePath, destPath);
+                    else
+                        File.Copy(sourcePath, destPath);
+
                     Exif exif = new Exif(destPath);
 
                     db.xspUpdateImage(entity.Id, fileName, mimeType, exif.Resolution.X, exif.Resolution.Y, ref resultcode);
