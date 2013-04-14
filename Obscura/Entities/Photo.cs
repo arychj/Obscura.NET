@@ -151,8 +151,10 @@ namespace Obscura.Entities {
                 if (resultcode == "SUCCESS") {
                     photo = new Photo(entity, thumbnailid, imageid);
                 }
-                else
+                else {
+                    entity.Delete();
                     throw new ObscuraException(string.Format("Unable to create Photo. ({0})", resultcode));
+                }
             }
 
             return photo;

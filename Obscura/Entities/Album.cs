@@ -74,10 +74,9 @@ namespace Obscura.Entities {
         /// Retrieves an Album
         /// </summary>
         /// <param name="id">the id of the Album</param>
-        /// <param name="loadImmediately">Load the Photo's contents immediately</param>
+        /// <param name="loadImmediately">Load the Album's contents immediately</param>
         internal Album(int id, bool loadImmediately)
             : base(id, loadImmediately) {
-
                 if (loadImmediately)
                     Load();
         }
@@ -154,7 +153,7 @@ namespace Obscura.Entities {
         /// <param name="cover">the cover Image of the Album</param>
         /// <param name="thumbnail">the thumbnail Image of the Album</param>
         /// <returns>a new Album</returns>
-        public static Album Create(string title, string description, Image cover, Image thumbnail) {
+        public static Album Create(string title, string description, Image thumbnail, Image cover) {
             Album album = null;
             Entity entity;
             string resultcode = null;
@@ -166,8 +165,10 @@ namespace Obscura.Entities {
                 if (resultcode == "SUCCESS") {
                     album = new Album(entity, cover, thumbnail, new EntityCollection<Photo>(entity.Id));
                 }
-                else
+                else {
+                    entity.Delete();
                     throw new ObscuraException(string.Format("Unable to create Album. ({0})", resultcode));
+                }
             }
 
             return album;

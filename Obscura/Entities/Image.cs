@@ -211,7 +211,7 @@ namespace Obscura.Entities {
                     fileName = string.Format("{0}.{1}", entity.Id, extension);
                     destPath = string.Format(@"{0}\{1}", Settings.GetSetting("ImageDirectory"), fileName);
 
-                    File.Move(sourcePath, destPath);
+                    File.Copy(sourcePath, destPath);
                     Exif exif = new Exif(destPath);
 
                     db.xspUpdateImage(entity.Id, fileName, mimeType, exif.Resolution.X, exif.Resolution.Y, ref resultcode);
@@ -220,8 +220,10 @@ namespace Obscura.Entities {
                         image = new Image(entity, fileName, mimeType, exif);
                         exif.SaveToEntity(entity.Id);
                     }
-                    else
+                    else {
+                        entity.Delete();
                         throw new ObscuraException(string.Format("Unable to create Image. ({0})", resultcode));
+                    }
                 }
             }
             else
@@ -256,8 +258,10 @@ namespace Obscura.Entities {
                     image = new Image(entity, destPath, mimeType, exif);
                     exif.SaveToEntity(entity.Id);
                 }
-                else
+                else {
+                    entity.Delete();
                     throw new ObscuraException(string.Format("Unable to create Image. ({0})", resultcode));
+                }
 
             }
 
