@@ -59,7 +59,7 @@ namespace Obscura.Common {
         }
 
         public ObscuraException(string details)
-            : this("", "", "", "") { }
+            : this("", "", "", details) { }
 
         public ObscuraException(Exception e)
             : this (e.Message, e.GetType().ToString(), e.StackTrace, "") { }
