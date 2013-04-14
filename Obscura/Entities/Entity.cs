@@ -20,6 +20,7 @@ namespace Obscura.Entities {
         private bool _active;
         private string _title, _description;
         private int _hitcount;
+        private Url _url = null;
 
         #region accessors
 
@@ -98,6 +99,19 @@ namespace Obscura.Entities {
             set {
                 Load();
                 Update(null, null, value);
+            }
+        }
+
+        /// <summary>
+        /// The URL to this Entity
+        /// </summary>
+        public Url Url {
+            get {
+                Load();
+                if (_url == null)
+                    _url = new Url(this);
+
+                return _url;
             }
         }
 

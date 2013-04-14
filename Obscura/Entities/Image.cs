@@ -17,7 +17,7 @@ namespace Obscura.Entities {
 
         private Resolution _resolution;
         private Exif _exif = null;
-        private string _filePath, _mimeType, _url = null, _html = null;
+        private string _filePath, _mimeType, _html = null;
 
         #region accessors
 
@@ -38,23 +38,6 @@ namespace Obscura.Entities {
             get {
                 Load(); 
                 return _mimeType;
-            }
-        }
-
-        /// <summary>
-        /// The URL to the image
-        /// </summary>
-        public string Url {
-            get {
-                Load(); 
-                if (_url == null) {
-                    _url = DataTools.BuildString(Settings.GetSetting("ImageUrlFormat"), new Dictionary<string, string>() {
-                        {"id", base.Id.ToString()},
-                        {"title", base.Title.Replace(" ", "-")}
-                    });
-                }
-
-                return _url;
             }
         }
 
