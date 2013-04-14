@@ -15,6 +15,7 @@ namespace Obscura.Entities {
     public class Photo : Entity {
         bool _loaded = false;
         private Image _image, _thumbnail;
+        private EntityCollection<Image> _resolutions;
 
         #region accessors
 
@@ -46,6 +47,13 @@ namespace Obscura.Entities {
             }
         }
 
+        public EntityCollection<Image> Resolutions {
+            get {
+                Load();
+                return _resolutions;
+            }
+        }
+
         #endregion
 
         /// <summary>
@@ -74,10 +82,12 @@ namespace Obscura.Entities {
         /// <param name="entity">the base Entity of this photo</param>
         /// <param name="thumbnail">the thumbnail Image associated with this photo</param>
         /// <param name="image">the main Image associated with this photo</param>
-        internal Photo(Entity entity, Image thumbnail, Image image)
+        /// <param name="resolutions">the collection of different Image resolutions associated with this Photo</param>
+        internal Photo(Entity entity, Image thumbnail, Image image, EntityCollection<Image> resolutions)
             : base(entity) {
             _thumbnail = thumbnail;
             _image = image;
+            _resolutions = resolutions;
             _loaded = true;
         }
 
@@ -127,6 +137,7 @@ namespace Obscura.Entities {
                     if (resultcode == "SUCCESS") {
                         _thumbnail = new Image((int)thumbnailid);
                         _image = new Image((int)imageid);
+                        _resolutions = new EntityCollection<Image>(base.Id);
                     }
                     else
                         throw new ObscuraException(string.Format("Photo Entity Id {0} does not exist. ({1})", base.Id, resultcode));
@@ -161,7 +172,7 @@ namespace Obscura.Entities {
                     ref resultcode);
 
                 if (resultcode == "SUCCESS") {
-                    photo = new Photo(entity, thumbnail, image);
+                    photo = new Photo(entity, thumbnail, image, new EntityCollection<Image>(entity.Id));
                 }
                 else {
                     entity.Delete();
