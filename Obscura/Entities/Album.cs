@@ -153,7 +153,7 @@ namespace Obscura.Entities {
         /// <param name="cover">the cover Image of the Album</param>
         /// <param name="thumbnail">the thumbnail Image of the Album</param>
         /// <returns>a new Album</returns>
-        public static Album Create(string title, string description, Image thumbnail, Image cover) {
+        public static Album Create(string title, string description, Image cover, Image thumbnail) {
             Album album = null;
             Entity entity;
             string resultcode = null;
