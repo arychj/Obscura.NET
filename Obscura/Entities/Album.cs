@@ -102,8 +102,10 @@ namespace Obscura.Entities {
         /// </summary>
         /// <param name="thumbnail">the thumbnail Image associated with this Album</param>
         /// <param name="cover">the cover Image associated with this Album</param>
-        public void Update(Image thumbnail, Image cover) {
+        public void Update(bool? active, string title, string description, Image thumbnail, Image cover) {
             string resultcode = null;
+
+            base.Update(active, title, description);
 
             using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
                 db.xspUpdateAlbum(

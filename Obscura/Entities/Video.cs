@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace Obscura.Entities {
     public class Video : Entity {
-        private int _key;
-        private string _url;
-        private VideoSource _type;
+        private VideoSource _source;
 
         public enum VideoSource {
             Vimeo, 
@@ -17,19 +15,11 @@ namespace Obscura.Entities {
 
         #region accessores
 
-        public VideoSource Type {
-            get { return _type; }
+        public VideoSource Source {
+            get { return _source; }
             set {
                 Update(null, value);
-                _type = value;
-            }
-        }
-
-        public string Url {
-            get { return _url; }
-            set {
-                Update(value, null);
-                _url = value;
+                _source = value;
             }
         }
 
@@ -45,7 +35,7 @@ namespace Obscura.Entities {
             return null;
         }
 
-        public void Update(string url, VideoSource? type) {
+        public void Update(string url, VideoSource? source) {
             //TODO: update
         }
 

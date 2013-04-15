@@ -84,8 +84,10 @@ namespace Obscura.Entities {
         /// </summary>
         /// <param name="coverid">the id of the cover Image associated with this Journal</param>
         /// <param name="body">the ibody text of this Journal</param>
-        public void Update(Image cover, string body) {
+        public void Update(bool? active, string title, string description, Image cover, string body) {
             string resultcode = null;
+
+            base.Update(active, title, description);
 
             using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
                 db.xspUpdateJournal(base.Id, (cover == null ? null : (int?)cover.Id), body, ref resultcode);

@@ -98,11 +98,13 @@ namespace Obscura.Entities {
         /// </summary>
         /// <param name="thumbnail">the thumbnail Image associated with this Photo</param>
         /// <param name="image">the main Image associated with this Photo</param>
-        public void Update(Image thumbnail, Image image) {
+        public void Update(bool? active, string title, string description, Image thumbnail, Image image) {
             string resultcode = null;
 
             if (image == null)
                 throw new ObscuraException("A Photo's Image may not be null");
+
+            base.Update(active, title, description);
 
             using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
                 db.xspUpdatePhoto(

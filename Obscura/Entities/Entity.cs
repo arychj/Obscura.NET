@@ -219,25 +219,27 @@ namespace Obscura.Entities {
         /// <param name="title">the new title</param>
         /// <param name="description">the new description</param>
         public void Update(bool? active, string title, string description) {
-            int? id = _id, typeid = null;
-            string resultcode = null;
+            if (active != null || title != null || description != null) {
+                int? id = _id, typeid = null;
+                string resultcode = null;
 
-            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
-                db.xspUpdateEntity(ref id, ref typeid, null, title, description, active, ref resultcode);
+                using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
+                    db.xspUpdateEntity(ref id, ref typeid, null, title, description, active, ref resultcode);
+                }
+
+                if (resultcode == "SUCCESS") {
+                    _dates.Modified = DateTime.Now;
+
+                    if (title != null)
+                        _title = title;
+                    if (description != null)
+                        _description = description;
+                    if (active != null)
+                        _active = (bool)active;
+                }
+                else
+                    throw new ObscuraException(string.Format("Unable to update Entity ID {0}. ({1})", _id, resultcode));
             }
-
-            if (resultcode == "SUCCESS") {
-                _dates.Modified = DateTime.Now;
-
-                if (title != null)
-                    _title = title;
-                if (description != null)
-                    _description = description;
-                if (active != null)
-                    _active = (bool)active;
-            }
-            else
-                throw new ObscuraException(string.Format("Unable to update Entity ID {0}. ({1})", _id, resultcode));
         }
 
         /// <summary>
