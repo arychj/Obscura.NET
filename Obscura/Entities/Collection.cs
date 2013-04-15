@@ -202,5 +202,13 @@ namespace Obscura.Entities {
         new public static Collection Retrieve(int id) {
             return new Collection(id);
         }
+
+        /// <summary>
+        /// Retrieves all Collections from the database
+        /// </summary>
+        /// <returns>An EntityCollection containing all Collections</returns>
+        public static EntityCollection<Collection> All() {
+            return new EntityCollection<Collection>();
+        }
     }
 }

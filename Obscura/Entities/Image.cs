@@ -279,6 +279,14 @@ namespace Obscura.Entities {
         new public static Image Retrieve(int id) {
             return new Image(id, true);
         }
+        
+        /// <summary>
+        /// Retrieves all Images from the database
+        /// </summary>
+        /// <returns>An EntityCollection containing all Images</returns>
+        public static EntityCollection<Image> All() {
+            return new EntityCollection<Image>();
+        }
 
         public static byte[] ResizeImage(byte[] image, int targetSize) {
             byte[] resized;

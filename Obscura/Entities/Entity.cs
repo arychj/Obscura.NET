@@ -358,6 +358,14 @@ namespace Obscura.Entities {
             return new Entity(id, true);
         }
 
+        /// <summary>
+        /// Retrieves all Entities from the database
+        /// </summary>
+        /// <returns>An EntityCollection containing all Entities</returns>
+        public static EntityCollection<Entity> All() {
+            return new EntityCollection<Entity>();
+        }
+
         #region equality
 
         public static bool operator ==(Entity a, Entity b) {
