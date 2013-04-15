@@ -70,12 +70,12 @@ namespace Obscura.Web {
                 try {
                     handler(_page.Request, document);
                 }
-                catch (Exception ex) {
-                    LogError(document, "Error processing XML handler '" + handlerId + "'.", ex.ToString() + @"\n" + ex.StackTrace, _page.Request);
+                catch (Exception e) {
+                    LogError(document, e, null, _page.Request);
                 }
             }
             else {
-                LogError(document, "Handler '" + handlerId + "' not found.", "Request for handler '" + handlerId + "': not found.", _page.Request);
+                LogError(document, null, "Handler '" + handlerId + "' not found.", _page.Request);
             }
 
             return document.OuterXml;
@@ -96,12 +96,17 @@ namespace Obscura.Web {
         /// <param name="errorClient">The error to send to the client</param>
         /// <param name="errorLog">The detailed error to log to file</param>
         /// <param name="request">The current http request</param>
-        private void LogError(XmlDocument document, string errorClient, string errorLog, HttpRequest request) {
+        private void LogError(XmlDocument document, Exception e, string message, HttpRequest request) {
             XmlElement error = document.CreateElement("error");
-            error.InnerText = errorClient;
+            error.InnerText = (message == null ? e.Message : message);
             document.DocumentElement.AppendChild(error);
 
-            ObscuraException e = new ObscuraException(string.Format("Ajax Error: {0} // Referrer: {1}", errorLog, request.UrlReferrer.AbsoluteUri));
+            ObscuraException oex;
+            if(e == null)
+                 oex = new ObscuraException(e);
+            else
+                oex = new ObscuraException(message);
+
         }
     }
 }

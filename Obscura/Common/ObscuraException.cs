@@ -31,11 +31,11 @@ namespace Obscura.Common {
             get { return _ip; }
         }
 
-        public string Message {
+        public override string Message {
             get { return _message; }
         }
 
-        public string StackTrace {
+        public override string StackTrace {
             get { return _stackTrace; }
         }
 
