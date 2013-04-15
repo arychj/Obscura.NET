@@ -178,7 +178,7 @@ namespace Obscura.Entities {
         private void ReadExif(ExifReader reader) {
             _tags = new Dictionary<string, string>();
 
-            double d; int i; string s; ushort u; DateTime dt;
+            double d; string s; ushort u; DateTime dt;
             try {
                 //exposure
                 reader.GetTagValue(ExifTags.FNumber, out d);

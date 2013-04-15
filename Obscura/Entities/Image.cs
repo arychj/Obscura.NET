@@ -298,7 +298,7 @@ namespace Obscura.Entities {
         /// Retrieves all Images from the database
         /// </summary>
         /// <returns>An EntityCollection containing all Images</returns>
-        public static EntityCollection<Image> All() {
+        new public static EntityCollection<Image> All() {
             return new EntityCollection<Image>();
         }
 

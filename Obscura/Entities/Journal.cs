@@ -188,7 +188,7 @@ namespace Obscura.Entities {
         /// Retrieves all Journals from the database
         /// </summary>
         /// <returns>An EntityCollection containing all Journals</returns>
-        public static EntityCollection<Journal> All() {
+        new public static EntityCollection<Journal> All() {
             return new EntityCollection<Journal>();
         }
     }

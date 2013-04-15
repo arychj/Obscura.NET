@@ -215,7 +215,7 @@ namespace Obscura.Entities {
         /// Retrieves all Albums from the database
         /// </summary>
         /// <returns>An EntityCollection containing all Albums</returns>
-        public static EntityCollection<Album> All() {
+        new public static EntityCollection<Album> All() {
             return new EntityCollection<Album>();
         }
     }
