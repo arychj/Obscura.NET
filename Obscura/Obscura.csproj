@@ -63,7 +63,7 @@
     <Compile Include="Entities\ExifReader.cs" />
     <Compile Include="Entities\ExifTags.cs" />
     <Compile Include="Entities\Image.cs" />
-    <Compile Include="Entities\Resolution.cs" />
+    <Compile Include="Entities\Dimensions.cs" />
     <Compile Include="Entities\Journal.cs" />
     <Compile Include="Entities\Photo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

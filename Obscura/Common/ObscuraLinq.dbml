@@ -51,26 +51,6 @@
     <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
     <Return Type="System.Int32" />
   </Function>
-  <Function Name="dbo.xspGetImage" Method="xspGetImage">
-    <Parameter Name="entityid" Type="System.Int32" DbType="Int" />
-    <Parameter Name="path" Type="System.String" DbType="VarChar(1000)" Direction="InOut" />
-    <Parameter Name="mimetype" Type="System.String" DbType="VarChar(50)" Direction="InOut" />
-    <Parameter Name="resolutionX" Type="System.Int32" DbType="Int" Direction="InOut" />
-    <Parameter Name="resolutionY" Type="System.Int32" DbType="Int" Direction="InOut" />
-    <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.xspUpdateImage" Method="xspUpdateImage">
-    <Parameter Name="entityid" Type="System.Int32" DbType="Int" />
-    <Parameter Name="path" Type="System.String" DbType="VarChar(1000)" />
-    <Parameter Name="mimetype" Type="System.String" DbType="VarChar(50)" />
-    <Parameter Name="resolutionX" Type="System.Int32" DbType="Int" />
-    <Parameter Name="resolutionY" Type="System.Int32" DbType="Int" />
-    <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
-    <ElementType Name="xspUpdateImageResult">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-    </ElementType>
-  </Function>
   <Function Name="dbo.xspDeleteEntity" Method="xspDeleteEntity">
     <Parameter Name="entityid" Type="System.Int32" DbType="Int" />
     <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
@@ -217,6 +197,26 @@
     <Parameter Name="type" Type="System.String" DbType="VarChar(50)" />
     <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
     <ElementType Name="xspGetEntitiesResult">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.xspGetImage" Method="xspGetImage">
+    <Parameter Name="entityid" Type="System.Int32" DbType="Int" />
+    <Parameter Name="path" Type="System.String" DbType="VarChar(1000)" Direction="InOut" />
+    <Parameter Name="mimetype" Type="System.String" DbType="VarChar(50)" Direction="InOut" />
+    <Parameter Name="width" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="height" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.xspUpdateImage" Method="xspUpdateImage">
+    <Parameter Name="entityid" Type="System.Int32" DbType="Int" />
+    <Parameter Name="path" Type="System.String" DbType="VarChar(1000)" />
+    <Parameter Name="mimetype" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="width" Type="System.Int32" DbType="Int" />
+    <Parameter Name="height" Type="System.Int32" DbType="Int" />
+    <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
+    <ElementType Name="xspUpdateImageResult">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </ElementType>
   </Function>

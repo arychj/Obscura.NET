@@ -15,7 +15,6 @@ namespace Obscura.Entities {
     /// </summary>
     public class Exif {
         private Dictionary<string, string> _tags;
-        private Resolution _resolution;
 
         #region accessors
 
@@ -101,13 +100,6 @@ namespace Obscura.Entities {
         /// </summary>
         public double Longitude {
             get { return (_tags.ContainsKey("Longitude") ? double.Parse(_tags["Longitude"]) : 0); }
-        }
-
-        /// <summary>
-        /// The resolution of the image
-        /// </summary>
-        public Resolution Resolution {
-            get { return _resolution; }
         }
 
         /// <summary>
@@ -224,12 +216,6 @@ namespace Obscura.Entities {
 
                 reader.GetTagValue(ExifTags.Copyright, out s);
                 _tags.Add("Copyright", s.ToString());
-
-                //image details
-                double x, y;
-                reader.GetTagValue(ExifTags.XResolution, out x);
-                reader.GetTagValue(ExifTags.YResolution, out y);
-                _resolution = new Resolution((int)x, (int)y);
             }
             catch (ExifLibException) { }
         }

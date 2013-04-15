@@ -16,7 +16,7 @@ namespace Obscura.Entities {
     public class Image : Entity {
         private bool _loaded = false;
 
-        private Resolution _resolution;
+        private Dimensions _dimensions;
         private Exif _exif = null;
         private string _filePath, _mimeType, _html = null;
 
@@ -69,12 +69,12 @@ namespace Obscura.Entities {
         }
 
         /// <summary>
-        /// The resolution of the Image
+        /// The dimensions of the Image
         /// </summary>
-        public Resolution Resolution {
+        public Dimensions Dimensions {
             get { 
                 Load(); 
-                return _resolution; 
+                return _dimensions; 
             }
         }
 
@@ -117,12 +117,12 @@ namespace Obscura.Entities {
         /// <param name="path">the path to the Image's file</param>
         /// <param name="mimeType">the MimeType of the Image</param>
         /// <param name="exif">the exif data associated with the Image</param>
-        internal Image(Entity entity, string path, string mimeType, Exif exif)
+        internal Image(Entity entity, string path, string mimeType, Dimensions dimensions, Exif exif)
             : base(entity) {
                 _filePath = path;
                 _mimeType = mimeType;
                 _exif = exif;
-                _resolution = exif.Resolution;
+                _dimensions = dimensions;
                 _loaded = true;
         }
 
@@ -167,6 +167,10 @@ namespace Obscura.Entities {
             foreach (KeyValuePair<string, string> tag in Exif.Tags)
                 xExif.AppendChild(dom.CreateElement(tag.Key)).InnerText = tag.Value;
 
+            XmlElement xDimensions = (XmlElement)xImage.AppendChild(dom.CreateElement("dimensions"));
+            xDimensions.AppendChild(dom.CreateElement("width")).InnerText = Dimensions.Width.ToString();
+            xDimensions.AppendChild(dom.CreateElement("height")).InnerText = Dimensions.Height.ToString();
+
             return dom;
         }
 
@@ -175,15 +179,15 @@ namespace Obscura.Entities {
         /// </summary>
         private void Load() {
             if (!_loaded) {
-                int? resolutionX = null, resolutionY = null;
+                int? width = null, height = null;
                 string resultcode = null;
 
                 using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
-                    db.xspGetImage(base.Id, ref _filePath, ref _mimeType, ref resolutionX, ref resolutionY, ref resultcode);
+                    db.xspGetImage(base.Id, ref _filePath, ref _mimeType, ref width, ref height, ref resultcode);
                 }
 
                 if (resultcode == "SUCCESS") {
-                    _resolution = new Resolution((int)resolutionX, (int)resolutionY);
+                    _dimensions = new Dimensions((int)width, (int)height);
                 }
                 else
                     throw new ObscuraException(string.Format("Unable to load Image ID {0}. ({1})", base.Id, resultcode));
@@ -200,6 +204,8 @@ namespace Obscura.Entities {
         public static Image Create(string sourcePath) {
             Image image = null;
             string extension, fileName, destPath, mimeType, resultcode = null;
+            Dimensions dimensions;
+            Exif exif;
 
             if (File.Exists(sourcePath)) {
                 using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
@@ -215,12 +221,15 @@ namespace Obscura.Entities {
                     else
                         File.Copy(sourcePath, destPath);
 
-                    Exif exif = new Exif(destPath);
+                    exif = new Exif(destPath);
 
-                    db.xspUpdateImage(entity.Id, fileName, mimeType, exif.Resolution.X, exif.Resolution.Y, ref resultcode);
+                    System.Drawing.Image i = System.Drawing.Image.FromFile(destPath);
+                    dimensions = new Dimensions(i.Width, i.Height);
+
+                    db.xspUpdateImage(entity.Id, fileName, mimeType, dimensions.Width, dimensions.Height, ref resultcode);
 
                     if (resultcode == "SUCCESS") {
-                        image = new Image(entity, fileName, mimeType, exif);
+                        image = new Image(entity, fileName, mimeType, dimensions, exif);
                         exif.SaveToEntity(entity.Id);
                     }
                     else {
@@ -244,6 +253,8 @@ namespace Obscura.Entities {
         public static Image Create(byte[] bytes, string mimeType) {
             Image image = null;
             string extension, fileName, destPath, resultcode = null;
+            Dimensions dimensions;
+            Exif exif;
 
             using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
                 Entity entity = Entity.Create(EntityType.Image, string.Empty, string.Empty);
@@ -253,12 +264,15 @@ namespace Obscura.Entities {
                 destPath = string.Format(@"{0}\{1}", Settings.GetSetting("ImageDirectory"), fileName);
 
                 File.WriteAllBytes(destPath, bytes);
-                Exif exif = new Exif(destPath);
+                exif = new Exif(destPath);
 
-                db.xspUpdateImage(entity.Id, fileName, mimeType, exif.Resolution.X, exif.Resolution.Y, ref resultcode);
+                System.Drawing.Image i = System.Drawing.Image.FromStream(new MemoryStream(bytes));
+                dimensions = new Dimensions(i.Width, i.Height);
+
+                db.xspUpdateImage(entity.Id, fileName, mimeType, dimensions.Width, dimensions.Height, ref resultcode);
 
                 if (resultcode == "SUCCESS") {
-                    image = new Image(entity, destPath, mimeType, exif);
+                    image = new Image(entity, destPath, mimeType, dimensions, exif);
                     exif.SaveToEntity(entity.Id);
                 }
                 else {

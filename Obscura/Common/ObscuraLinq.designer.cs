@@ -119,26 +119,6 @@ namespace Obscura.Common
 			return ((int)(result.ReturnValue));
 		}
 		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspGetImage")]
-		public int xspGetImage([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(1000)")] ref string path, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] ref string mimetype, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> resolutionX, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> resolutionY, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, path, mimetype, resolutionX, resolutionY, resultcode);
-			path = ((string)(result.GetParameterValue(1)));
-			mimetype = ((string)(result.GetParameterValue(2)));
-			resolutionX = ((System.Nullable<int>)(result.GetParameterValue(3)));
-			resolutionY = ((System.Nullable<int>)(result.GetParameterValue(4)));
-			resultcode = ((string)(result.GetParameterValue(5)));
-			return ((int)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspUpdateImage")]
-		public ISingleResult<xspUpdateImageResult> xspUpdateImage([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(1000)")] string path, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string mimetype, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> resolutionX, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> resolutionY, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, path, mimetype, resolutionX, resolutionY, resultcode);
-			resultcode = ((string)(result.GetParameterValue(5)));
-			return ((ISingleResult<xspUpdateImageResult>)(result.ReturnValue));
-		}
-		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspDeleteEntity")]
 		public int xspDeleteEntity([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
 		{
@@ -298,6 +278,26 @@ namespace Obscura.Common
 			resultcode = ((string)(result.GetParameterValue(1)));
 			return ((ISingleResult<xspGetEntitiesResult>)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspGetImage")]
+		public int xspGetImage([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(1000)")] ref string path, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] ref string mimetype, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> width, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> height, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, path, mimetype, width, height, resultcode);
+			path = ((string)(result.GetParameterValue(1)));
+			mimetype = ((string)(result.GetParameterValue(2)));
+			width = ((System.Nullable<int>)(result.GetParameterValue(3)));
+			height = ((System.Nullable<int>)(result.GetParameterValue(4)));
+			resultcode = ((string)(result.GetParameterValue(5)));
+			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspUpdateImage")]
+		public ISingleResult<xspUpdateImageResult> xspUpdateImage([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(1000)")] string path, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string mimetype, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> width, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> height, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), entityid, path, mimetype, width, height, resultcode);
+			resultcode = ((string)(result.GetParameterValue(5)));
+			return ((ISingleResult<xspUpdateImageResult>)(result.ReturnValue));
+		}
 	}
 	
 	public partial class xspUpdatePhotoResult
@@ -401,32 +401,6 @@ namespace Obscura.Common
 				if ((this._resolutionY != value))
 				{
 					this._resolutionY = value;
-				}
-			}
-		}
-	}
-	
-	public partial class xspUpdateImageResult
-	{
-		
-		private int _id;
-		
-		public xspUpdateImageResult()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="Int NOT NULL")]
-		public int id
-		{
-			get
-			{
-				return this._id;
-			}
-			set
-			{
-				if ((this._id != value))
-				{
-					this._id = value;
 				}
 			}
 		}
@@ -752,6 +726,32 @@ namespace Obscura.Common
 		private int _id;
 		
 		public xspGetEntitiesResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="Int NOT NULL")]
+		public int id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this._id = value;
+				}
+			}
+		}
+	}
+	
+	public partial class xspUpdateImageResult
+	{
+		
+		private int _id;
+		
+		public xspUpdateImageResult()
 		{
 		}
 		
