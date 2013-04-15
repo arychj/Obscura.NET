@@ -17,7 +17,7 @@ namespace Obscura.Entities {
     /// </summary>
     public class EntityCollection<T> : IEnumerable where T : Entity {
         private Entity _entity;
-        private List<Entity> _members;
+        private List<T> _members;
         private Type _memberType;
 
         #region operator overloads
@@ -57,7 +57,7 @@ namespace Obscura.Entities {
                 ISingleResult<xspGetEntityMembersResult> members = db.xspGetEntityMembers(_entity.Id, ref resultcode);
 
                 if (resultcode == "SUCCESS") {
-                    _members = new List<Entity>();
+                    _members = new List<T>();
                     foreach (xspGetEntityMembersResult member in members)
                         _members.Add(GetMember((int)member.id_member));
                 }
@@ -71,20 +71,24 @@ namespace Obscura.Entities {
         /// Retrieves all Entites of the specified EntityType
         /// </summary>
         /// <param name="type">the type of entities to retrieve</param>
-        internal EntityCollection(EntityType type){
+        internal EntityCollection(){
             _entity = null;
+            _memberType = typeof(T);
+
+            string type = _memberType.ToString();
+            type = type.Substring(type.LastIndexOf('.') + 1);
 
             string resultcode = null;
             using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
-                ISingleResult<xspGetEntitiesResult> members = db.xspGetEntities(type.ToString(), ref resultcode);
+                ISingleResult<xspGetEntitiesResult> members = db.xspGetEntities(type, ref resultcode);
 
                 if (resultcode == "SUCCESS") {
-                    _members = new List<Entity>();
+                    _members = new List<T>();
                     foreach (xspGetEntitiesResult member in members)
                         _members.Add(GetMember((int)member.id));
                 }
                 else
-                    throw new ObscuraException(string.Format("Error retrieving null EntityCollection for Entity Type {0}. ({1})", type.ToString(), resultcode));
+                    throw new ObscuraException(string.Format("Error retrieving null EntityCollection for EntityType {0}. ({1})", type, resultcode));
             }
         }
 
@@ -187,10 +191,9 @@ namespace Obscura.Entities {
         public XmlDocument ToXml() {
             XmlDocument dom = new XmlDocument();
             XmlElement xCollection = (XmlElement)dom.AppendChild(dom.CreateElement("EntityCollection"));
-            xCollection.SetAttribute("id", _entity.Id.ToString());
 
-            string[] type = _memberType.ToString().Split('.');
-            xCollection.SetAttribute("type", type[type.Length - 1]);
+            if(_entity != null)
+                xCollection.SetAttribute("id", _entity.Id.ToString());
 
             T entity;
             XmlElement xEntity;
@@ -213,10 +216,9 @@ namespace Obscura.Entities {
         public XmlDocument ToXml(int start, int size) {
             XmlDocument dom = new XmlDocument();
             XmlElement xCollection = (XmlElement)dom.AppendChild(dom.CreateElement("EntityCollection"));
-            xCollection.SetAttribute("id", _entity.Id.ToString());
 
-            string[] type = _memberType.ToString().Split('.');
-            xCollection.SetAttribute("type", type[type.Length - 1]);
+            if (_entity != null)
+                xCollection.SetAttribute("id", _entity.Id.ToString());
 
             T entity;
             XmlElement xEntity;
