@@ -290,6 +290,14 @@ namespace Obscura.Common
 			resultcode = ((string)(result.GetParameterValue(8)));
 			return ((int)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspGetEntities")]
+		public ISingleResult<xspGetEntitiesResult> xspGetEntities([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string type, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), type, resultcode);
+			resultcode = ((string)(result.GetParameterValue(1)));
+			return ((ISingleResult<xspGetEntitiesResult>)(result.ReturnValue));
+		}
 	}
 	
 	public partial class xspUpdatePhotoResult
@@ -733,6 +741,32 @@ namespace Obscura.Common
 				if ((this._Tag != value))
 				{
 					this._Tag = value;
+				}
+			}
+		}
+	}
+	
+	public partial class xspGetEntitiesResult
+	{
+		
+		private int _id;
+		
+		public xspGetEntitiesResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="Int NOT NULL")]
+		public int id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this._id = value;
 				}
 			}
 		}

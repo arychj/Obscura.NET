@@ -213,4 +213,11 @@
     <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
     <Return Type="System.Int32" />
   </Function>
+  <Function Name="dbo.xspGetEntities" Method="xspGetEntities">
+    <Parameter Name="type" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
+    <ElementType Name="xspGetEntitiesResult">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
 </Database>

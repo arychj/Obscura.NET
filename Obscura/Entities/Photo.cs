@@ -160,7 +160,7 @@ namespace Obscura.Entities {
                     if (resultcode == "SUCCESS") {
                         _thumbnail = new Image((int)thumbnailid);
                         _image = new Image((int)imageid);
-                        _resolutions = new EntityCollection<Image>(base.Id);
+                        _resolutions = new EntityCollection<Image>(this);
                     }
                     else
                         throw new ObscuraException(string.Format("Photo Entity Id {0} does not exist. ({1})", base.Id, resultcode));
@@ -195,7 +195,7 @@ namespace Obscura.Entities {
                     ref resultcode);
 
                 if (resultcode == "SUCCESS") {
-                    photo = new Photo(entity, thumbnail, image, new EntityCollection<Image>(entity.Id));
+                    photo = new Photo(entity, thumbnail, image, new EntityCollection<Image>(entity));
                 }
                 else {
                     entity.Delete();

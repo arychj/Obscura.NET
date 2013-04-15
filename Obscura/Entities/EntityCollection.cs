@@ -16,7 +16,7 @@ namespace Obscura.Entities {
     /// A collection of Entities belonging to another Entity
     /// </summary>
     public class EntityCollection<T> : IEnumerable where T : Entity {
-        private int _parentid;
+        private Entity _entity;
         private List<Entity> _members;
         private Type _memberType;
 
@@ -47,20 +47,14 @@ namespace Obscura.Entities {
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="parent">the parent of this collection</param>
-        internal EntityCollection(T parent) : this(parent.Id) { }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="parentid">the id of the parent of this collection</param>
-        internal EntityCollection(int parentid) {
-            _parentid = parentid;
+        /// <param name="entity">the Entity to retrieve the collection for</param>
+        internal EntityCollection(Entity entity) {
+            _entity = entity;
             _memberType = typeof(T);
 
             string resultcode = null;
             using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
-                ISingleResult<xspGetEntityMembersResult> members = db.xspGetEntityMembers(parentid, ref resultcode);
+                ISingleResult<xspGetEntityMembersResult> members = db.xspGetEntityMembers(_entity.Id, ref resultcode);
 
                 if (resultcode == "SUCCESS") {
                     _members = new List<Entity>();
@@ -68,7 +62,29 @@ namespace Obscura.Entities {
                         _members.Add(GetMember((int)member.id_member));
                 }
                 else
-                    throw new ObscuraException(string.Format("Error retrieving EntityCollection for Entity ID {0}. ({1})", parentid, resultcode));
+                    throw new ObscuraException(string.Format("Error retrieving EntityCollection for Entity ID {0}. ({1})", _entity.Id, resultcode));
+            }
+        }
+
+        /// <summary>
+        /// Constructor
+        /// Retrieves all Entites of the specified EntityType
+        /// </summary>
+        /// <param name="type">the type of entities to retrieve</param>
+        internal EntityCollection(EntityType type){
+            _entity = null;
+
+            string resultcode = null;
+            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
+                ISingleResult<xspGetEntitiesResult> members = db.xspGetEntities(type.ToString(), ref resultcode);
+
+                if (resultcode == "SUCCESS") {
+                    _members = new List<Entity>();
+                    foreach (xspGetEntitiesResult member in members)
+                        _members.Add(GetMember((int)member.id));
+                }
+                else
+                    throw new ObscuraException(string.Format("Error retrieving null EntityCollection for Entity Type {0}. ({1})", type.ToString(), resultcode));
             }
         }
 
@@ -95,19 +111,24 @@ namespace Obscura.Entities {
         /// </summary>
         /// <param name="member">The member to add</param>
         public void Add(T member) {
-            int? id = -1;
-            string resultcode = null;
+            if (_entity != null) {
+                int? id = -1;
+                string resultcode = null;
 
-            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
-                db.xspUpdateEntityMember(ref id, _parentid, member.Id, ref resultcode);
-            }
+                using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
+                    db.xspUpdateEntityMember(ref id, _entity.Id, member.Id, ref resultcode);
+                }
 
-            if(resultcode == "SUCCESS" ||resultcode == "EXISTS"){
-                if(!_members.Contains(member))
-                    _members.Add(member);
+                if (resultcode == "SUCCESS" || resultcode == "EXISTS") {
+                    if (!_members.Contains(member))
+                        _members.Add(member);
+                }
+                else
+                    throw new ObscuraException(string.Format("Unable to add member with Entity ID {0} to EntityCollection. ({1})", member.Id, resultcode));
             }
             else
-                throw new ObscuraException(string.Format("Unable to add member with Entity ID {0} to EntityCollection. ({1})", member.Id, resultcode));
+                throw new ObscuraException("Cannot add an Entity to the null collection.");
+
         }
 
         /// <summary>
@@ -123,16 +144,20 @@ namespace Obscura.Entities {
         /// </summary>
         /// <param name="member">the member to remove</param>
         public void Remove(T member) {
-            string resultcode = null;
+            if (_entity != null) {
+                string resultcode = null;
 
-            using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
-                db.xspDeleteEntityMember(_parentid, member.Id, ref resultcode);
+                using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
+                    db.xspDeleteEntityMember(_entity.Id, member.Id, ref resultcode);
+                }
+
+                if (resultcode == "SUCCESS")
+                    _members.Remove(member);
+                else
+                    throw new ObscuraException(string.Format("Unable to remove member with Entity ID {0} from EntityCollection. ({1})", member.Id, resultcode));
             }
-
-            if(resultcode == "SUCCESS")
-                _members.Remove(member);
             else
-                throw new ObscuraException(string.Format("Unable to remove member with Entity ID {0} from EntityCollection. ({1})", member.Id, resultcode));
+                throw new ObscuraException("Cannot remove an Entity from the null collection.");
         }
 
         /// <summary>
@@ -162,7 +187,7 @@ namespace Obscura.Entities {
         public XmlDocument ToXml() {
             XmlDocument dom = new XmlDocument();
             XmlElement xCollection = (XmlElement)dom.AppendChild(dom.CreateElement("EntityCollection"));
-            xCollection.SetAttribute("id", _parentid.ToString());
+            xCollection.SetAttribute("id", _entity.Id.ToString());
 
             string[] type = _memberType.ToString().Split('.');
             xCollection.SetAttribute("type", type[type.Length - 1]);
@@ -188,7 +213,7 @@ namespace Obscura.Entities {
         public XmlDocument ToXml(int start, int size) {
             XmlDocument dom = new XmlDocument();
             XmlElement xCollection = (XmlElement)dom.AppendChild(dom.CreateElement("EntityCollection"));
-            xCollection.SetAttribute("id", _parentid.ToString());
+            xCollection.SetAttribute("id", _entity.Id.ToString());
 
             string[] type = _memberType.ToString().Split('.');
             xCollection.SetAttribute("type", type[type.Length - 1]);
@@ -219,19 +244,19 @@ namespace Obscura.Entities {
         /// <summary>
         /// Retrieves the specified EntityCollection
         /// </summary>
-        /// <param name="parent">the parent Entity to retrieve the collection for</param>
+        /// <param name="entity">the Entity to retrieve the collection for</param>
         /// <returns>the parent's EntityCollection</returns>
-        public static EntityCollection<T> Retrieve(T parent) {
-            return Retrieve(parent.Id);
+        public static EntityCollection<T> Retrieve(Entity entity) {
+            return new EntityCollection<T>(entity);
         }
 
         /// <summary>
         /// Retrieves the specified EntityCollection
         /// </summary>
-        /// <param name="parent">the id of the parent Entity to retrieve the collection for</param>
+        /// <param name="entityid">the id of the Entity to retrieve the collection for</param>
         /// <returns>the parent's EntityCollection</returns>
-        public static EntityCollection<T> Retrieve(int parentid) {
-            return new EntityCollection<T>(parentid);
+        public static EntityCollection<T> Retrieve(int entityid) {
+            return new EntityCollection<T>(new Entity(entityid));
         }
     }
 }

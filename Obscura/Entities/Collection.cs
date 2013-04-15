@@ -155,7 +155,7 @@ namespace Obscura.Entities {
 
                 _thumbnail = new Image((int)thumbid);
                 _cover = new Image((int)coverid);
-                _albums = new EntityCollection<Album>(base.Id);
+                _albums = new EntityCollection<Album>(this);
                 _loaded = true;
             }
         }
@@ -183,7 +183,7 @@ namespace Obscura.Entities {
                 );
 
                 if (resultcode == "SUCCESS") {
-                    collection = new Collection(entity, cover, thumbnail, new EntityCollection<Album>(entity.Id));
+                    collection = new Collection(entity, cover, thumbnail, new EntityCollection<Album>(entity));
                 }
                 else {
                     entity.Delete();
