@@ -30,7 +30,7 @@ namespace Obscura.Entities {
             }
             set {
                 Load();
-                Update(value, null);
+                Update(null, null, null, value, null);
             }
         }
 
@@ -44,7 +44,7 @@ namespace Obscura.Entities {
             }
             set {
                 Load();
-                Update(null, value);
+                Update(null, null, null, null, value);
             }
         }
 
