@@ -79,7 +79,7 @@ namespace Obscura.Entities {
                     {"base", Settings.GetSetting("UrlBase")},
                     {"id", _entity.Id.ToString()},
                     {"title", _entity.Title.Replace(" ", "-")}
-                });
+                }).TrimEnd('-');
             }
             else
                 throw new ObscuraException(string.Format("Unable to build URL for EntityType '{0}'. Format not found.", _entity.Type.ToString()));
