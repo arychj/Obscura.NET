@@ -14,17 +14,6 @@
     <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
     <Return Type="System.Int32" />
   </Function>
-  <Function Name="dbo.xspWriteException" Method="xspWriteException">
-    <Parameter Name="id" Type="System.Int32" DbType="Int" Direction="InOut" />
-    <Parameter Name="origin" Type="System.String" DbType="VarChar(1000)" />
-    <Parameter Name="type" Type="System.String" DbType="VarChar(1000)" />
-    <Parameter Name="message" Type="System.String" DbType="VarChar(1000)" />
-    <Parameter Name="details" Type="System.String" DbType="VarChar(MAX)" />
-    <Parameter Name="stacktrace" Type="System.String" DbType="Text" />
-    <Parameter Name="clientip" Type="System.String" DbType="VarChar(15)" />
-    <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
-    <Return Type="System.Int32" />
-  </Function>
   <Function Name="dbo.xspUpdatePhoto" Method="xspUpdatePhoto">
     <Parameter Name="entityid" Type="System.Int32" DbType="Int" />
     <Parameter Name="thumbnailid" Type="System.Int32" DbType="Int" />
@@ -211,5 +200,17 @@
     <ElementType Name="xspGetEntityResult">
       <Column Name="Tag" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
     </ElementType>
+  </Function>
+  <Function Name="dbo.xspWriteException" Method="xspWriteException">
+    <Parameter Name="id" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="origin" Type="System.String" DbType="VarChar(1000)" />
+    <Parameter Name="type" Type="System.String" DbType="VarChar(1000)" />
+    <Parameter Name="message" Type="System.String" DbType="VarChar(1000)" />
+    <Parameter Name="details" Type="System.String" DbType="VarChar(MAX)" />
+    <Parameter Name="stacktrace" Type="System.String" DbType="Text" />
+    <Parameter Name="url" Type="System.String" DbType="VarChar(1000)" />
+    <Parameter Name="clientip" Type="System.String" DbType="VarChar(15)" />
+    <Parameter Name="resultcode" Type="System.String" DbType="VarChar(10)" Direction="InOut" />
+    <Return Type="System.Int32" />
   </Function>
 </Database>

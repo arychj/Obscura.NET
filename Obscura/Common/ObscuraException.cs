@@ -4,12 +4,13 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Obscura.Common {
 
     [Serializable]
     public class ObscuraException : Exception {
-        private string _origin, _type, _details, _ip, _message, _stackTrace;
+        private string _origin, _type, _details, _ip, _message, _stackTrace, _url;
         int _id;
 
         #region accessors
@@ -42,6 +43,10 @@ namespace Obscura.Common {
             get { return _origin; }
         }
 
+        public string Url {
+            get { return _url; }
+        }
+
         #endregion
 
         #region constructors
@@ -54,12 +59,13 @@ namespace Obscura.Common {
             _stackTrace = stackTrace;
             _details = details;
             _ip = ClientTools.IPAddress();
+            _url = (HttpContext.Current == null ? string.Empty : HttpContext.Current.Request.Url.AbsoluteUri);
 
             LogException();
         }
 
         public ObscuraException(string details)
-            : this("", "", "", details) { }
+            : this(details, "", "", details) { }
 
         public ObscuraException(Exception e)
             : this (e.Message, e.GetType().ToString(), e.StackTrace, "") { }
@@ -75,12 +81,14 @@ namespace Obscura.Common {
         protected ObscuraException(SerializationInfo info, StreamingContext context)
             : base(info, context) {
             if (info != null) {
-                _origin = info.GetString("txtorigin");
-                _type = info.GetString("txttype");
+                _id = info.GetInt32("intId");
+                _origin = info.GetString("txtOrigin");
+                _type = info.GetString("txtType");
+                _details = info.GetString("txtDetails");
+                _ip = info.GetString("txtIp");
                 _message = info.GetString("txtMessage");
                 _stackTrace = info.GetString("txtStackTrace");
-                _details = info.GetString("txtDetails");
-                _ip = info.GetString("txtIP");
+                _url = info.GetString("txtUrl");
             }
         }
 
@@ -95,12 +103,14 @@ namespace Obscura.Common {
             base.GetObjectData(info, context);
 
             if (info != null) {
-                info.AddValue("txtorigin", _origin);
-                info.AddValue("txttype", _type);
+                info.AddValue("intId", _id);
+                info.AddValue("txtOrigin", _origin);
+                info.AddValue("txtType", _type);
+                info.AddValue("txtDetails", _details);
+                info.AddValue("txtIp", _ip);
                 info.AddValue("txtMessage", _message);
                 info.AddValue("txtStackTrace", _stackTrace);
-                info.AddValue("txtDetails", _details);
-                info.AddValue("txtIP", _ip);
+                info.AddValue("txtUrl", _url);
             }
         }
 
@@ -112,7 +122,7 @@ namespace Obscura.Common {
                 int? id = null;
                 string resultcode = null;
 
-                db.xspWriteException(ref id, _origin, _type, _message, _details, _stackTrace, _ip, ref resultcode);
+                db.xspWriteException(ref id, _origin, _type, _message, _details, _stackTrace, _url, _ip, ref resultcode);
 
                 _id = (int)id;
             }

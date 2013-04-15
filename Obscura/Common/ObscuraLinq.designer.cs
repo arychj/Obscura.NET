@@ -79,15 +79,6 @@ namespace Obscura.Common
 			return ((int)(result.ReturnValue));
 		}
 		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspWriteException")]
-		public int xspWriteException([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> id, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(1000)")] string origin, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(1000)")] string type, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(1000)")] string message, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(MAX)")] string details, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Text")] string stacktrace, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(15)")] string clientip, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), id, origin, type, message, details, stacktrace, clientip, resultcode);
-			id = ((System.Nullable<int>)(result.GetParameterValue(0)));
-			resultcode = ((string)(result.GetParameterValue(7)));
-			return ((int)(result.ReturnValue));
-		}
-		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspUpdatePhoto")]
 		public ISingleResult<xspUpdatePhotoResult> xspUpdatePhoto([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> entityid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> thumbnailid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> imageid, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
 		{
@@ -289,6 +280,15 @@ namespace Obscura.Common
 			isActive = ((System.Nullable<bool>)(result.GetParameterValue(8)));
 			resultcode = ((string)(result.GetParameterValue(9)));
 			return ((ISingleResult<xspGetEntityResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.xspWriteException")]
+		public int xspWriteException([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] ref System.Nullable<int> id, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(1000)")] string origin, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(1000)")] string type, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(1000)")] string message, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(MAX)")] string details, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Text")] string stacktrace, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(1000)")] string url, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(15)")] string clientip, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(10)")] ref string resultcode)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), id, origin, type, message, details, stacktrace, url, clientip, resultcode);
+			id = ((System.Nullable<int>)(result.GetParameterValue(0)));
+			resultcode = ((string)(result.GetParameterValue(8)));
+			return ((int)(result.ReturnValue));
 		}
 	}
 	
