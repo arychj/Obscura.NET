@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 using Obscura.Common;
 
@@ -98,6 +99,23 @@ namespace Obscura.Entities {
                 else
                     throw new ObscuraException(string.Format("Unable to update Journal Entity ID {0}. ({1})", base.Id, resultcode));
             }
+        }
+
+        /// <summary>
+        /// An XML representation of this Journal
+        /// </summary>
+        /// <returns>An XML document</returns>
+        new public XmlDocument ToXml() {
+            XmlDocument dom = base.ToXml();
+            XmlElement xJournal = (XmlElement)dom.DocumentElement.AppendChild(dom.CreateElement(Type.ToString()));
+
+            XmlElement xCover = (XmlElement)xJournal.AppendChild(dom.CreateElement("cover"));
+            xCover.SetAttribute("id", Cover.Id.ToString());
+            xCover.AppendChild(dom.CreateElement("url")).InnerText = Cover.Url.ToString();
+
+            xJournal.AppendChild(dom.CreateCDataSection("body")).AppendChild(dom.CreateCDataSection(Body));
+
+            return dom;
         }
 
         /// <summary>

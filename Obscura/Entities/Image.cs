@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Xml;
 
 using Obscura.Common;
 
@@ -152,6 +153,21 @@ namespace Obscura.Entities {
             }
 
             fs.Close();
+        }
+
+        /// <summary>
+        /// An XML representation of this Image
+        /// </summary>
+        /// <returns>An XML document</returns>
+        new public XmlDocument ToXml() {
+            XmlDocument dom = base.ToXml();
+            XmlElement xImage = (XmlElement)dom.DocumentElement.AppendChild(dom.CreateElement("image"));
+
+            XmlElement xExif = (XmlElement)xImage.AppendChild(dom.CreateElement("exif"));
+            foreach (KeyValuePair<string, string> tag in Exif.Tags)
+                xExif.AppendChild(dom.CreateElement(tag.Key)).InnerText = tag.Value;
+
+            return dom;
         }
 
         /// <summary>

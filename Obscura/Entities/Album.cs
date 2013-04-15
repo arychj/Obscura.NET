@@ -4,6 +4,7 @@ using System.Data.Linq;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 using Obscura.Common;
 
@@ -121,6 +122,25 @@ namespace Obscura.Entities {
                 else
                     throw new ObscuraException(string.Format("Unable to update Album Entity ID {0}. ({1})", base.Id, resultcode));
             }
+        }
+
+        /// <summary>
+        /// An XML representation of this Album
+        /// </summary>
+        /// <returns>An XML document</returns>
+        new public XmlDocument ToXml(){
+            XmlDocument dom = base.ToXml();
+            XmlElement xAlbum = (XmlElement)dom.DocumentElement.AppendChild(dom.CreateElement(Type.ToString()));
+
+            XmlElement xThumbnail = (XmlElement)xAlbum.AppendChild(dom.CreateElement("thumbnail"));
+            xThumbnail.SetAttribute("id", Thumbnail.Id.ToString());
+            xThumbnail.AppendChild(dom.CreateElement("url")).InnerText = Thumbnail.Url.ToString();
+
+            XmlElement xCover = (XmlElement)xAlbum.AppendChild(dom.CreateElement("cover"));
+            xCover.SetAttribute("id", Cover.Id.ToString());
+            xCover.AppendChild(dom.CreateElement("url")).InnerText = Cover.Url.ToString();
+
+            return dom;
         }
 
         /// <summary>

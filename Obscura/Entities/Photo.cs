@@ -4,6 +4,7 @@ using System.Data.Linq;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 using Obscura.Common;
 
@@ -120,6 +121,28 @@ namespace Obscura.Entities {
                 else
                     throw new ObscuraException(string.Format("Unable to update Photo Entity ID {0}. ({1})", base.Id, resultcode));
             }
+        }
+
+        /// <summary>
+        /// An XML representation of this Photo
+        /// </summary>
+        /// <returns>An XML document</returns>
+        new public XmlDocument ToXml() {
+            XmlDocument dom = base.ToXml();
+            XmlElement xPhoto = (XmlElement)dom.DocumentElement.AppendChild(dom.CreateElement(Type.ToString()));
+
+            XmlElement xThumbnail = (XmlElement)xPhoto.AppendChild(dom.CreateElement("thumbnail"));
+            xThumbnail.SetAttribute("id", Thumbnail.Id.ToString());
+            xThumbnail.AppendChild(dom.CreateElement("url")).InnerText = Thumbnail.Url.ToString();
+
+            XmlElement xResolution, xResolutions = (XmlElement)xPhoto.AppendChild(dom.CreateElement("resolutions"));
+            foreach(Image resolution in Resolutions){
+                xResolution = (XmlElement)xResolutions.AppendChild(dom.CreateElement("image"));
+                xResolution.SetAttribute("id", resolution.Id.ToString());
+                xResolution.AppendChild(dom.CreateElement("url")).InnerText = resolution.Url.ToString();
+            }
+
+            return dom;
         }
 
         /// <summary>

@@ -4,6 +4,7 @@ using System.Data.Linq;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 using Obscura.Common;
 
@@ -250,6 +251,32 @@ namespace Obscura.Entities {
 
             if (resultcode != "SUCCESS")
                 throw new ObscuraException(string.Format("Unable to delete Entity ID {0}", _id));
+        }
+
+        /// <summary>
+        /// An XML representation of this Entity
+        /// </summary>
+        /// <returns>An XML document</returns>
+        public XmlDocument ToXml() {
+            XmlDocument dom = new XmlDocument();
+            XmlElement xEntity = dom.CreateElement("Entity");
+            dom.AppendChild(xEntity);
+
+            xEntity.SetAttribute("id", Id.ToString());
+            xEntity.SetAttribute("type", Type.ToString());
+            xEntity.SetAttribute("active", IsActive.ToString());
+            xEntity.AppendChild(dom.CreateElement("title")).AppendChild(dom.CreateCDataSection(Title));
+            xEntity.AppendChild(dom.CreateElement("description")).AppendChild(dom.CreateCDataSection(Description));
+            xEntity.AppendChild(dom.CreateElement("url")).InnerText = Url.ToString();
+            xEntity.AppendChild(dom.CreateElement("hitcount")).InnerText = HitCount.ToString();
+            xEntity.AppendChild(dom.CreateElement("datecreated")).InnerText = Dates.Created.ToString();
+            xEntity.AppendChild(dom.CreateElement("datemodified")).InnerText = Dates.Modified.ToString();
+
+            XmlElement xTags = (XmlElement)xEntity.AppendChild(dom.CreateElement("tags"));
+            foreach (string tag in Tags)
+                xTags.AppendChild(dom.CreateElement("tag")).InnerText = tag;
+
+            return dom;
         }
 
         /// <summary>

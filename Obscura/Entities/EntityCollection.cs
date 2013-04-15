@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
+using System.Xml;
 
 using Obscura.Common;
 
@@ -121,7 +122,7 @@ namespace Obscura.Entities {
         /// Removes a member from the EntityCollection
         /// </summary>
         /// <param name="member">the member to remove</param>
-        public void Remove(Entity member) {
+        public void Remove(T member) {
             string resultcode = null;
 
             using (ObscuraLinqDataContext db = new ObscuraLinqDataContext(Config.ConnectionString)) {
@@ -152,6 +153,58 @@ namespace Obscura.Entities {
         public IEnumerator GetEnumerator(int start, int size) {
             for (int i = start; i < start + size && i < _members.Count; i++)
                 yield return (T)_members.ElementAt(i);
+        }
+
+        /// <summary>
+        /// An XML representation of this EntityCollection
+        /// </summary>
+        /// <returns>An XML document</returns>
+        public XmlDocument ToXml() {
+            XmlDocument dom = new XmlDocument();
+            XmlElement xCollection = (XmlElement)dom.AppendChild(dom.CreateElement("EntityCollection"));
+            xCollection.SetAttribute("id", _parentid.ToString());
+
+            string[] type = _memberType.ToString().Split('.');
+            xCollection.SetAttribute("type", type[type.Length - 1]);
+
+            T entity;
+            XmlElement xEntity;
+            IEnumerator enumerator = GetEnumerator();
+            while (enumerator.MoveNext()) {
+                entity = ((T)enumerator.Current);
+                xEntity = (XmlElement)xCollection.AppendChild(dom.CreateElement(entity.Type.ToString()));
+                xEntity.SetAttribute("id", entity.Id.ToString());
+                xEntity.AppendChild(dom.CreateElement("title")).InnerText = entity.Title.ToString();
+                xEntity.AppendChild(dom.CreateElement("url")).InnerText = entity.Url.ToString();
+            }
+
+            return dom;
+        }
+
+        /// <summary>
+        /// An XML representation of this EntityCollection
+        /// </summary>
+        /// <returns>An XML document</returns>
+        public XmlDocument ToXml(int start, int size) {
+            XmlDocument dom = new XmlDocument();
+            XmlElement xCollection = (XmlElement)dom.AppendChild(dom.CreateElement("EntityCollection"));
+            xCollection.SetAttribute("id", _parentid.ToString());
+
+            string[] type = _memberType.ToString().Split('.');
+            xCollection.SetAttribute("type", type[type.Length - 1]);
+
+            T entity;
+            XmlElement xEntity;
+            IEnumerator enumerator = GetEnumerator(start, size);
+            while (enumerator.MoveNext()) {
+                entity = ((T)enumerator.Current);
+                xEntity = (XmlElement)xCollection.AppendChild(dom.CreateElement(entity.Type.ToString()));
+                xEntity.SetAttribute("id", entity.Id.ToString());
+                xEntity.AppendChild(dom.CreateElement("title")).InnerText = entity.Title.ToString();
+                xEntity.AppendChild(dom.CreateElement("url")).InnerText = entity.Url.ToString();
+            }
+
+            return dom;
         }
 
         /// <summary>
